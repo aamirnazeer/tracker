@@ -6,7 +6,7 @@ const router = express.Router();
 
 export const users = [];
 
-router.post('/signup', async (req: Request, res: Response) => {
+router.post('/api/signup', async (req: Request, res: Response) => {
   const { name, username, password } = req.body;
 
   if (users.find((user) => user.username === username))
@@ -17,13 +17,13 @@ router.post('/signup', async (req: Request, res: Response) => {
     const user = { name, username, password: hashedPassword };
     users.push(user);
 
-    const a = { username: username };
-    const accessToken = jwt.sign(a, process.env.ACCESS_TOKEN_SECRET);
+    const accessToken = jwt.sign(
+      { username: username },
+      process.env.ACCESS_TOKEN_SECRET
+    );
     res.json({ accessToken: accessToken });
-
-    res.json(users);
   } catch (err) {
-    console.log(err);
+    res.sendStatus(403);
   }
 });
 

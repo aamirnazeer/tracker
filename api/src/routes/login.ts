@@ -12,14 +12,16 @@ router.post('/api/login', async (req: Request, res: Response) => {
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     if (await bcrypt.compare(password, user.password)) {
-      const a = { username: username };
-      const accessToken = jwt.sign(a, process.env.ACCESS_TOKEN_SECRET);
+      const accessToken = jwt.sign(
+        { username: username },
+        process.env.ACCESS_TOKEN_SECRET
+      );
       res.json({ accessToken: accessToken });
     } else {
-      res.send('Not Allowed');
+      res.sendStatus(401);
     }
   } catch {
-    res.status(500).send();
+    res.sendStatus(500);
   }
 });
 

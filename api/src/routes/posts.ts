@@ -19,7 +19,6 @@ const posts = [
 ];
 
 router.get('/api/posts', authenticateToken, (req: Request, res: Response) => {
-  console.log(req.currentUser)
   res.json(posts.filter((post) => post.username === req.currentUser.username));
 });
 
