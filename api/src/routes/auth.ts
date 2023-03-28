@@ -114,7 +114,7 @@ router.delete('/api/logout', async (req: Request, res: Response) => {
 
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.status(204).send({ message: 'logout success' });
+  res.status(200).send({ message: 'logout success' });
 });
 
 export { router as authRouter };

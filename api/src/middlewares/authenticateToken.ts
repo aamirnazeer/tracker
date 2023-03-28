@@ -25,7 +25,8 @@ export const authenticateToken = (
     token,
     process.env.ACCESS_TOKEN_SECRET,
     (err: any, user: UserPayload) => {
-      if (err) return res.sendStatus(403);
+      if (err)
+        return res.status(403).send({ message: 'authentication failed' });
       req.currentUser = user;
       next();
     }
