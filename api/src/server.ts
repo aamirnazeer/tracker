@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import { postsRouter } from './routes/posts';
 import { authRouter } from './routes/auth';
 import { entriesRouter } from './routes/entries';
 import { catagoriesRouter } from './routes/catagories';
@@ -16,7 +15,6 @@ app.use(cookieParser());
 
 dotenv.config();
 
-app.use(postsRouter);
 app.use(authRouter);
 app.use(entriesRouter);
 app.use(catagoriesRouter);
