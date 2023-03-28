@@ -18,14 +18,13 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies.accessToken;
   if (token === null) return res.sendStatus(401);
 
   jwt.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET,
-    (err, user: UserPayload) => {
+    (err: any, user: UserPayload) => {
       if (err) return res.sendStatus(403);
       req.currentUser = user;
       next();

@@ -1,22 +1,24 @@
 import express, { Application } from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
-import { loginRouter } from './routes/login';
 import { postsRouter } from './routes/posts';
-import { signupRouter } from './routes/signup';
-import { tokenRouter } from './routes/token';
+import { authRouter } from './routes/auth';
+
+import { PrismaClient } from '@prisma/client';
 
 const app: Application = express();
+const prisma = new PrismaClient();
+
 app.use(express.json());
 app.use(cors({ origin: '*' }));
+app.use(cookieParser());
 
 dotenv.config();
 
-app.use(loginRouter);
 app.use(postsRouter);
-app.use(signupRouter);
-app.use(tokenRouter);
+app.use(authRouter);
 
 app.listen(5000, () => {
   console.log('server running');
