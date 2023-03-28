@@ -2,14 +2,15 @@ import { TextField, Box, Button } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function Login() {
+export default function Signup() {
+  const [name, setName] = useState('');
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
-  const signinHandler = () => {
+  const signupHandler = () => {
     const payload = { name, username, password };
     axios
-      .post('http://localhost:5000/api/login', payload, {
+      .post('http://localhost:5000/api/signup', payload, {
         withCredentials: true,
       })
       .then((response) => console.log(response));
@@ -32,26 +33,35 @@ export default function Login() {
         autoComplete="off"
       >
         <TextField
-          id="loginusername"
-          label="UserName"
+          id="signupName"
+          label="Name"
           type="text"
           variant="standard"
           required
-          value={username}
-          onChange={(e) => setUserName(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <TextField
-          id="loginpassword"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
+          id="signupusername"
+          label="UserName"
+          type="text"
           variant="standard"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" onClick={signinHandler}>
-          Login
+        <TextField
+          id="signuppassword"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          variant="standard"
+          required
+          value={username}
+          onChange={(e) => setUserName(e.target.value)}
+        />
+        <Button variant="contained" onClick={signupHandler}>
+          Signup
         </Button>
       </Box>
     </div>
