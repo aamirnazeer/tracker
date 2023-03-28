@@ -5,7 +5,6 @@ import generateAccessToken from '../utilities/generateAccessToken';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-
 const router = express.Router();
 
 router.post('/api/signup', async (req: Request, res: Response) => {
@@ -17,7 +16,7 @@ router.post('/api/signup', async (req: Request, res: Response) => {
       },
     });
     if (checkUser !== null)
-      return res.send({ message: 'user already created' });
+      return res.status(403).send({ message: 'user already created' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = { name, username, password: hashedPassword };
@@ -42,21 +41,22 @@ router.post('/api/signup', async (req: Request, res: Response) => {
 
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
-    res.send();
+    res.status(201).send({ message: 'user created' });
   } catch (err) {
     console.log(err);
-    res.sendStatus(403);
+    res.status(403).send({ message: 'something went wrong' });
   }
 });
 
 router.post('/api/login', async (req: Request, res: Response) => {
   const { username, password } = req.body;
-  const user = await prisma.users.findFirst({
+  const user = await prisma.users.findUnique({
     where: {
       username: username,
     },
   });
-  if (user === null) return res.status(400).send('Cannot find user');
+  if (user === null)
+    return res.status(400).send({ message: 'cannot find user' });
   try {
     if (await bcrypt.compare(password, user.password)) {
       const accessToken = generateAccessToken({ username: user.username });
@@ -73,19 +73,21 @@ router.post('/api/login', async (req: Request, res: Response) => {
 
       res.cookie('accessToken', accessToken, { httpOnly: true });
       res.cookie('refreshToken', refreshToken, { httpOnly: true });
-      res.send({});
+      res.status(200).send({ message: 'login successfull' });
     } else {
-      res.sendStatus(401);
+      res.status(401).send({ message: 'incorrect credentials' });
     }
-  } catch {
-    res.sendStatus(500);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: 'something went wrong' });
   }
 });
 
 router.post('/api/token', async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
 
-  if (refreshToken === undefined) return res.sendStatus(401);
+  if (refreshToken === undefined)
+    return res.status(400).send({ message: 'error' });
 
   const checkRefreshToken = await prisma.refreshtokens.findUnique({
     where: {
@@ -93,12 +95,13 @@ router.post('/api/token', async (req: Request, res: Response) => {
     },
   });
 
-  if (checkRefreshToken === null) return res.sendStatus(403);
+  if (checkRefreshToken === null)
+    return res.status(401).send({ message: 'cannot provide token' });
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     const accessToken = generateAccessToken({ username: user.username });
     res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.send({});
+    res.status(200).send({ message: 'sent new accesstoken' });
   });
 });
 
@@ -111,7 +114,7 @@ router.delete('/api/logout', async (req: Request, res: Response) => {
 
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.sendStatus(204);
+  res.status(204).send({ message: 'logout success' });
 });
 
 export { router as authRouter };
