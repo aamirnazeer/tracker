@@ -1,7 +1,9 @@
-import express from 'express';
-import { Application, NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import generateAccessToken from '../utilities/generateAccessToken';
+import { refreshTokens } from './token';
+
 const router = express.Router();
 
 import { users } from './signup';
@@ -12,11 +14,13 @@ router.post('/api/login', async (req: Request, res: Response) => {
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     if (await bcrypt.compare(password, user.password)) {
-      const accessToken = jwt.sign(
-        { username: username },
-        process.env.ACCESS_TOKEN_SECRET
+      const accessToken = generateAccessToken({ username: user.username });
+      const refreshToken = jwt.sign(
+        { username: user.username },
+        process.env.REFRESH_TOKEN_SECRET
       );
-      res.json({ accessToken: accessToken });
+      refreshTokens.push(refreshToken);
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
     } else {
       res.sendStatus(401);
     }
