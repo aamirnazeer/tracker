@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser';
 
 import { postsRouter } from './routes/posts';
 import { authRouter } from './routes/auth';
+import { entriesRouter } from './routes/entries';
+import { catagoriesRouter } from './routes/catagories';
 
 const app: Application = express();
 
@@ -16,6 +18,8 @@ dotenv.config();
 
 app.use(postsRouter);
 app.use(authRouter);
+app.use(entriesRouter);
+app.use(catagoriesRouter);
 
 app.listen(5000, () => {
   console.log('server running');

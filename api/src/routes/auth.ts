@@ -27,9 +27,17 @@ router.post('/api/signup', async (req: Request, res: Response) => {
         password: hashedPassword,
       },
     });
-    const accessToken = generateAccessToken({ username: user.username });
+    const addedUser = await prisma.users.findUnique({
+      where: {
+        username: name,
+      },
+    });
+    const accessToken = generateAccessToken({
+      id: addedUser.id,
+      username: addedUser.username,
+    });
     const refreshToken = jwt.sign(
-      { username: user.username },
+      { id: addedUser.id, username: addedUser.username },
       process.env.REFRESH_TOKEN_SECRET
     );
 
@@ -59,9 +67,12 @@ router.post('/api/login', async (req: Request, res: Response) => {
     return res.status(400).send({ message: 'cannot find user' });
   try {
     if (await bcrypt.compare(password, user.password)) {
-      const accessToken = generateAccessToken({ username: user.username });
+      const accessToken = generateAccessToken({
+        id: user.id,
+        username: user.username,
+      });
       const refreshToken = jwt.sign(
-        { username: user.username },
+        { id: user.id, username: user.username },
         process.env.REFRESH_TOKEN_SECRET
       );
 
@@ -99,7 +110,11 @@ router.post('/api/token', async (req: Request, res: Response) => {
     return res.status(401).send({ message: 'cannot provide token' });
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    const accessToken = generateAccessToken({ username: user.username });
+    console.log(user);
+    const accessToken = generateAccessToken({
+      id: user.id,
+      username: user.username,
+    });
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.status(200).send({ message: 'sent new accesstoken' });
   });
