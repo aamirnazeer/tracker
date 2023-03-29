@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import { authRouter } from './routes/auth';
 import { entriesRouter } from './routes/entries';
 import { catagoriesRouter } from './routes/catagories';
+import { tokenRouter } from './routes/token';
+import { usersRouter } from './routes/users';
 
 const app: Application = express();
 
@@ -18,6 +20,8 @@ dotenv.config();
 app.use(authRouter);
 app.use(entriesRouter);
 app.use(catagoriesRouter);
+app.use(tokenRouter);
+app.use(usersRouter);
 
 app.listen(5000, () => {
   console.log('server running');

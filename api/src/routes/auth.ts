@@ -19,17 +19,11 @@ router.post('/api/signup', async (req: Request, res: Response) => {
       return res.status(403).send({ message: 'user already created' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = { name, username, password: hashedPassword };
-    await prisma.users.create({
+    const addedUser = await prisma.users.create({
       data: {
         name: name,
         username: username,
         password: hashedPassword,
-      },
-    });
-    const addedUser = await prisma.users.findUnique({
-      where: {
-        username: name,
       },
     });
     const accessToken = generateAccessToken({
@@ -94,31 +88,7 @@ router.post('/api/login', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/api/token', async (req: Request, res: Response) => {
-  const { refreshToken } = req.cookies;
 
-  if (refreshToken === undefined)
-    return res.status(400).send({ message: 'error' });
-
-  const checkRefreshToken = await prisma.refreshtokens.findUnique({
-    where: {
-      token: refreshToken,
-    },
-  });
-
-  if (checkRefreshToken === null)
-    return res.status(401).send({ message: 'cannot provide token' });
-
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    console.log(user);
-    const accessToken = generateAccessToken({
-      id: user.id,
-      username: user.username,
-    });
-    res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.status(200).send({ message: 'sent new accesstoken' });
-  });
-});
 
 router.delete('/api/logout', async (req: Request, res: Response) => {
   await prisma.refreshtokens.delete({
