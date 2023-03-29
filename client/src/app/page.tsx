@@ -1,66 +1,113 @@
 'use client';
-
-import { useState, MouseEvent } from 'react';
-
 import {
-  AppBar,
-  Box,
-  Toolbar,
-  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
   Button,
-  IconButton,
+  InputLabel,
+  Box,
 } from '@mui/material';
+import { useState } from 'react';
 
-import MenuIcon from '@mui/icons-material/Menu';
-import Login from '@/components/login';
-import Signup from '@/components/signup';
+import axios from 'axios';
+
+const defaultValues = {
+  amount: '',
+  catagoryId: '',
+  comments: '',
+};
 
 export default function Home() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [signin, setSignin] = useState(false);
+  const [formValues, setFormValues] = useState(defaultValues);
 
-  const loginHandler = (e: MouseEvent<HTMLElement>) => {
+  const handleInputChange = (e: any) => {
     e.preventDefault();
-    setLoggedIn(true);
-    setSignin(false);
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: name === 'comments' ? value : parseInt(value, 10),
+    });
   };
-  const signinHandler = (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    setLoggedIn(false);
-    setSignin(true);
+
+  const successHandler = () => {
+    setFormValues(defaultValues);
+    console.log('data added');
+  };
+
+  const handleSubmit = () => {
+    console.log(formValues);
+    axios
+      .post('http://localhost:5000/api/entries', formValues, {
+        withCredentials: true,
+      })
+      .then(() => successHandler())
+      .catch((err) => console.log(err));
   };
 
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Tracker
-            </Typography>
-            <Button
-              color="inherit"
-              onClick={(e) => loginHandler(e)}
-              disabled={false}
-            >
-              Login
-            </Button>
-            <Button color="inherit" onClick={(e) => signinHandler(e)}>
-              Signup
-            </Button>
-          </Toolbar>
-        </AppBar>
-        {loggedIn && <Login />}
-        {signin && <Signup />}
+      <Box
+        sx={{
+          '& .MuiTextField-root': { m: 2, width: '25ch' },
+          paddingTop: '30px',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <FormControl required sx={{ m: 1, minWidth: 120 }}>
+          <TextField
+            id="amount-input"
+            name="amount"
+            label="Amount"
+            type="number"
+            value={formValues.amount}
+            onChange={(e) => handleInputChange(e)}
+            required
+          />
+        </FormControl>
+        <FormControl required sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="catagoryidselect">Catagory</InputLabel>
+          <Select
+            labelId="catagoryidselect"
+            label="Catagory"
+            id="catagoryidselect"
+            name="catagoryId"
+            value={formValues.catagoryId}
+            onChange={(e) => handleInputChange(e)}
+            required
+          >
+            <MenuItem key="1" value="1">
+              First
+            </MenuItem>
+            <MenuItem key="2" value="2">
+              Second
+            </MenuItem>
+            <MenuItem key="3" value="3">
+              Third
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <TextField
+            id="comments"
+            name="comments"
+            label="Comment"
+            type="text"
+            value={formValues.comments}
+            onChange={(e) => handleInputChange(e)}
+          />
+        </FormControl>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
       </Box>
     </div>
   );

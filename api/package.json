@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc -p .",
-    "devStart": "nodemon src/server.ts",
+    "start": "nodemon src/server.ts",
     "lint:fix": "eslint --fix ./*.ts"
   },
   "keywords": [],

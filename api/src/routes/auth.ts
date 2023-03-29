@@ -88,8 +88,6 @@ router.post('/api/login', async (req: Request, res: Response) => {
   }
 });
 
-
-
 router.delete('/api/logout', async (req: Request, res: Response) => {
   await prisma.refreshtokens.delete({
     where: {
