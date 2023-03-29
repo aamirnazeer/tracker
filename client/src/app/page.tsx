@@ -7,6 +7,7 @@ import {
   Button,
   InputLabel,
   Box,
+  Paper,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -46,13 +47,13 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <Paper elevation={24} sx={{ height: '100vh' }}>
       <Box
         sx={{
           '& .MuiTextField-root': { m: 2, width: '25ch' },
           paddingTop: '30px',
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
         }}
@@ -68,7 +69,7 @@ export default function Home() {
             required
           />
         </FormControl>
-        <FormControl required sx={{ m: 1, minWidth: 120 }}>
+        <FormControl required sx={{ m: 1, minWidth: 200 }}>
           <InputLabel id="catagoryidselect">Catagory</InputLabel>
           <Select
             labelId="catagoryidselect"
@@ -109,6 +110,6 @@ export default function Home() {
           Submit
         </Button>
       </Box>
-    </div>
+    </Paper>
   );
 }
