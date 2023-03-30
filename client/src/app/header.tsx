@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { MouseEvent } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 import {
@@ -14,6 +14,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Header() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
   const logoutHandler = () => {
@@ -48,15 +49,20 @@ export default function Header() {
               Tracker
             </Typography>
 
-            <Button color="inherit" onClick={() => router.push('/login')}>
-              Login
-            </Button>
-            <Button color="inherit" onClick={() => router.push('/signup')}>
-              Signup
-            </Button>
-            <Button color="inherit" onClick={logoutHandler}>
-              Logout
-            </Button>
+            {!isLoggedIn ? (
+              <div>
+                <Button color="inherit" onClick={() => router.push('/login')}>
+                  Login
+                </Button>
+                <Button color="inherit" onClick={() => router.push('/signup')}>
+                  Signup
+                </Button>
+              </div>
+            ) : (
+              <Button color="inherit" onClick={logoutHandler}>
+                Logout
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
       </Box>

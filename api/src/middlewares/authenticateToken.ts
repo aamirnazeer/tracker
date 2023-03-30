@@ -21,7 +21,6 @@ export const authenticateToken = (
   next: NextFunction
 ) => {
   const token = req.cookies.accessToken;
-  console.log(token);
   if (!token) return res.status(401).send({ message: 'cookie missing' });
 
   jwt.verify(

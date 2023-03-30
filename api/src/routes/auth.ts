@@ -89,15 +89,23 @@ router.post('/api/login', async (req: Request, res: Response) => {
 });
 
 router.delete('/api/logout', async (req: Request, res: Response) => {
-  await prisma.refreshtokens.delete({
-    where: {
-      token: req.cookies.refreshToken,
-    },
-  });
+  const { refreshToken } = req.cookies;
+  if (!refreshToken)
+    return res.status(400).send({ message: 'logged out already user' });
+  try {
+    await prisma.refreshtokens.delete({
+      where: {
+        token: refreshToken,
+      },
+    });
 
-  res.clearCookie('accessToken');
-  res.clearCookie('refreshToken');
-  res.status(200).send({ message: 'logout success' });
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.status(200).send({ message: 'logout success' });
+  } catch (err) {
+    console.log(err);
+    res.status(401).send({ message: 'something went wrong' });
+  }
 });
 
 export { router as authRouter };
