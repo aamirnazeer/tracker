@@ -9,12 +9,14 @@ const useRequest = async (method: string, route: string) => {
   const b: string = refreshToken ? `; refreshToken=${refreshToken.value}` : '';
 
   if (method === 'get') {
-    const res = await axios.get('http://localhost:5000/api/catagories', {
+    const res = await axios.get(`${route}`, {
+      withCredentials: true,
       headers: {
         cookie: a + b,
       },
     });
-    return res.data;
+
+    return res;
   }
 };
 

@@ -10,6 +10,7 @@ router.post(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
+    console.log(req.currentUser);
     const catagoryId: number = req.body.catagoryId;
     const amount: number = req.body.amount;
     const comments: string = req.body.comments;

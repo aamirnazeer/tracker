@@ -26,7 +26,7 @@ export const authenticateToken = (
   jwt.verify(
     token,
     process.env.ACCESS_TOKEN_SECRET,
-    (err: TypeError, user: UserPayload) => {
+    async (err: TypeError, user: UserPayload) => {
       if (err)
         return res.status(401).send({ message: 'authentication failed' });
       req.currentUser = user;

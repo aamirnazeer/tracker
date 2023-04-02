@@ -8,6 +8,7 @@ import { entriesRouter } from './routes/entries';
 import { catagoriesRouter } from './routes/catagories';
 import { tokenRouter } from './routes/token';
 import { usersRouter } from './routes/users';
+import { currentUserRouter } from './routes/currentUser';
 
 const app: Application = express();
 
@@ -22,6 +23,7 @@ app.use(entriesRouter);
 app.use(catagoriesRouter);
 app.use(tokenRouter);
 app.use(usersRouter);
+app.use(currentUserRouter);
 
 app.listen(5000, () => {
   console.log('server running');

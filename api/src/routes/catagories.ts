@@ -29,6 +29,7 @@ router.get(
   '/api/catagories',
   authenticateToken,
   async (req: Request, res: Response) => {
+    console.log(req.currentUser);
     try {
       const catagories = await prisma.catagories.findMany();
       res.status(201).send(catagories);
