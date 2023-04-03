@@ -28,7 +28,15 @@ interface Props {
   }[];
 }
 
-const AddExpense: NextPage<Props> = ({ catagories = [] }) => {
+const AddExpense: NextPage = () => {
+  let catagories: {
+    id: number;
+    type: string;
+  }[] = [
+    { id: 1, type: 'fuel' },
+    { id: 2, type: 'groceries' },
+    { id: 4, type: 'sports' },
+  ];
   const [formValues, setFormValues] = useState(defaultValues);
 
   const handleInputChange = (e: any) => {

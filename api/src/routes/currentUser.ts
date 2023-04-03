@@ -13,7 +13,7 @@ router.get(
   authenticateToken,
   async (req: Request, res: Response) => {
     console.log(req.currentUser);
-    res.send({});
+    res.send({ currentUser: req.currentUser });
   }
 );
 
