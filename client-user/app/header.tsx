@@ -1,6 +1,9 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { loggedOut, loggedIn } from '@/redux/user/userSlice';
+import { RootState } from '@/redux/store';
 
 import {
   AppBar,
@@ -14,6 +17,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Header() {
+  const user = useSelector((state: RootState) => state.user);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const router = useRouter();
 
@@ -48,7 +52,6 @@ export default function Header() {
             >
               Tracker
             </Typography>
-
             {!isLoggedIn ? (
               <div>
                 <Button color="inherit" onClick={() => router.push('/login')}>

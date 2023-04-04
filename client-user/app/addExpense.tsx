@@ -8,36 +8,32 @@ import {
   Button,
   InputLabel,
   Box,
-  Paper,
 } from '@mui/material';
-import { useState } from 'react';
-
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
+import { axiosInstance } from '../axios/axiosInstance';
 
-const defaultValues = {
+const defaultFormValues = {
   amount: '',
   catagoryId: '',
   comments: '',
 };
 
-interface Props {
-  catagories: {
-    id: number;
-    type: string;
-  }[];
-}
+const defaultCatagoryValues = {
+  id: 0,
+  type: '',
+};
 
 const AddExpense: NextPage = () => {
-  let catagories: {
-    id: number;
-    type: string;
-  }[] = [
-    { id: 1, type: 'fuel' },
-    { id: 2, type: 'groceries' },
-    { id: 4, type: 'sports' },
-  ];
-  const [formValues, setFormValues] = useState(defaultValues);
+  const [catagories, setCatagories] = useState([defaultCatagoryValues]);
+  const [formValues, setFormValues] = useState(defaultFormValues);
+
+  useEffect(() => {
+    axiosInstance
+      .get('/catagories')
+      .then((res) => setCatagories(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
   const handleInputChange = (e: any) => {
     e.preventDefault();
@@ -49,16 +45,13 @@ const AddExpense: NextPage = () => {
   };
 
   const successHandler = () => {
-    setFormValues(defaultValues);
+    setFormValues(defaultFormValues);
     console.log('data added');
   };
 
   const handleSubmit = () => {
-    console.log(formValues);
-    axios
-      .post('http://localhost:5000/api/entries', formValues, {
-        withCredentials: true,
-      })
+    axiosInstance
+      .post('http://localhost:5000/api/entries', formValues)
       .then(() => successHandler())
       .catch((err) => console.log(err));
   };

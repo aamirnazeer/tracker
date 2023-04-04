@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.post('/api/token', async (req: Request, res: Response) => {
+router.get('/api/token', async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
 
   if (refreshToken === undefined)
@@ -26,9 +26,14 @@ router.post('/api/token', async (req: Request, res: Response) => {
     const accessToken = generateAccessToken({
       id: user.id,
       username: user.username,
+      name: user.name,
     });
     res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.status(200).send({ message: 'sent new accesstoken' });
+    res.status(200).send({
+      id: user.id,
+      username: user.username,
+      name: user.name,
+    });
   });
 });
 

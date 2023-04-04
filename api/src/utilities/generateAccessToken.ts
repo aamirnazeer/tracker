@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 interface User {
   username: string;
   id: number;
+  name: string;
 }
 
 const generateAccessToken = (user: User): string => {

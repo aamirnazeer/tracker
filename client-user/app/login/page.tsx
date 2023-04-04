@@ -17,7 +17,10 @@ export default function Login() {
       .post('http://localhost:5000/api/login', payload, {
         withCredentials: true,
       })
-      .then(() => router.push('/'))
+      .then((res) => {
+        console.log(res.data);
+        router.push('/');
+      })
       .catch((err) => console.log(err));
   };
 

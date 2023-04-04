@@ -1,6 +1,8 @@
 'use client';
 
-import Header from '@/components/header';
+import Header from '@/app/header';
+import { store } from '@/redux/store';
+import { Provider } from 'react-redux';
 
 export default function RootLayout({
   children,
@@ -10,8 +12,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        {children}
+        <Provider store={store}>
+          <Header />
+          {children}
+        </Provider>
       </body>
     </html>
   );

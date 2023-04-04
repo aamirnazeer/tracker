@@ -29,9 +29,10 @@ router.post('/api/signup', async (req: Request, res: Response) => {
     const accessToken = generateAccessToken({
       id: addedUser.id,
       username: addedUser.username,
+      name: addedUser.username,
     });
     const refreshToken = jwt.sign(
-      { id: addedUser.id, username: addedUser.username },
+      { id: addedUser.id, username: addedUser.username, name: addedUser.name },
       process.env.REFRESH_TOKEN_SECRET
     );
 
@@ -43,7 +44,11 @@ router.post('/api/signup', async (req: Request, res: Response) => {
 
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
-    res.status(201).send({ message: 'user created' });
+    res.status(201).send({
+      id: addedUser.id,
+      name: addedUser.name,
+      username: addedUser.username,
+    });
   } catch (err) {
     console.log(err);
     res.status(403).send({ message: 'something went wrong' });
@@ -64,9 +69,10 @@ router.post('/api/login', async (req: Request, res: Response) => {
       const accessToken = generateAccessToken({
         id: user.id,
         username: user.username,
+        name: user.username,
       });
       const refreshToken = jwt.sign(
-        { id: user.id, username: user.username },
+        { id: user.id, username: user.username, name: user.name },
         process.env.REFRESH_TOKEN_SECRET
       );
 
@@ -78,7 +84,9 @@ router.post('/api/login', async (req: Request, res: Response) => {
 
       res.cookie('accessToken', accessToken, { httpOnly: true });
       res.cookie('refreshToken', refreshToken, { httpOnly: true });
-      res.status(200).send({ message: 'login successfull' });
+      res
+        .status(200)
+        .send({ id: user.id, name: user.name, username: user.username });
     } else {
       res.status(400).send({ message: 'incorrect credentials' });
     }
