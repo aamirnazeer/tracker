@@ -80,7 +80,7 @@ router.post('/api/login', async (req: Request, res: Response) => {
       res.cookie('refreshToken', refreshToken, { httpOnly: true });
       res.status(200).send({ message: 'login successfull' });
     } else {
-      res.status(401).send({ message: 'incorrect credentials' });
+      res.status(400).send({ message: 'incorrect credentials' });
     }
   } catch (err) {
     console.log(err);
@@ -104,7 +104,7 @@ router.delete('/api/logout', async (req: Request, res: Response) => {
     res.status(200).send({ message: 'logout success' });
   } catch (err) {
     console.log(err);
-    res.status(401).send({ message: 'something went wrong' });
+    res.status(400).send({ message: 'something went wrong' });
   }
 });
 

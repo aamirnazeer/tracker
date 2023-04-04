@@ -19,7 +19,7 @@ router.post('/api/token', async (req: Request, res: Response) => {
   });
 
   if (checkRefreshToken === null)
-    return res.status(401).send({ message: 'cannot provide token' });
+    return res.status(400).send({ message: 'cannot provide token' });
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     console.log(user);

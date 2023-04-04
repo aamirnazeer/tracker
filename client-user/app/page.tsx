@@ -8,7 +8,7 @@ export default async function Home() {
     'http://localhost:5000/api/currentuser'
   );
 
-  console.log(res.data);
+  console.log(res.data.currentUser);
 
   return (
     <div>
