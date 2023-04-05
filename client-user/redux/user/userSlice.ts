@@ -4,34 +4,37 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface UserState {
   id: number;
   username: string;
+  name: string;
+  loggedIn: boolean;
 }
 
 const initialState: UserState = {
   id: 0,
+  name: '',
   username: '',
+  loggedIn: false,
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loggedOut: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
+    logOut: (state) => {
       state.id = 0;
       state.username = '';
+      state.name = '';
+      state.loggedIn = false;
     },
 
-    loggedIn: (state, action: PayloadAction<UserState>) => {
+    logIn: (state, action: PayloadAction<UserState>) => {
       state.id = action.payload.id;
       state.username = action.payload.username;
+      state.name = action.payload.name;
+      state.loggedIn = true;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { loggedOut, loggedIn } = userSlice.actions;
+export const { logIn, logOut } = userSlice.actions;
 
 export default userSlice.reducer;

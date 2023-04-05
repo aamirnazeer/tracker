@@ -4,6 +4,10 @@ import Header from '@/app/header';
 import { store } from '@/redux/store';
 import { Provider } from 'react-redux';
 
+export const metadata = {
+  title: 'Tracker App',
+};
+
 export default function RootLayout({
   children,
 }: {

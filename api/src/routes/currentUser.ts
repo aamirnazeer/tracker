@@ -7,8 +7,8 @@ router.get(
   '/api/currentuser',
   authenticateToken,
   async (req: Request, res: Response) => {
-    console.log(req.currentUser);
-    res.send({ currentUser: req.currentUser });
+    const data = req.currentUser;
+    res.send(data);
   }
 );
 

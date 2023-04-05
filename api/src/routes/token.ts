@@ -22,7 +22,6 @@ router.get('/api/token', async (req: Request, res: Response) => {
     return res.status(400).send({ message: 'cannot provide token' });
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    console.log(user);
     const accessToken = generateAccessToken({
       id: user.id,
       username: user.username,

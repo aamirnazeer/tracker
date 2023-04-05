@@ -1,27 +1,43 @@
 'use client';
 
-import { TextField, Box, Button } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FormControl } from '@mui/material';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { logIn } from '@/redux/user/userSlice';
+
+const defaultFormValues = {
+  username: '',
+  password: '',
+};
 
 export default function Login() {
   const router = useRouter();
-  const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const [formValues, setFormValues] = useState(defaultFormValues);
 
   const signinHandler = () => {
-    const payload = { username, password };
     axios
-      .post('http://localhost:5000/api/login', payload, {
+      .post('http://localhost:5000/api/login', formValues, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
+        dispatch(logIn(res.data));
         router.push('/');
       })
       .catch((err) => console.log(err));
+  };
+
+  const handleInputChange = (e: any) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log(name, value);
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
   };
 
   return (
@@ -37,22 +53,24 @@ export default function Login() {
       }}
     >
       <TextField
-        id="loginusername"
-        label="UserName"
+        id="username"
+        name="username"
+        label="Username"
         type="text"
         variant="standard"
         required
-        value={username}
-        onChange={(e) => setUserName(e.target.value)}
+        value={formValues.username}
+        onChange={(e) => handleInputChange(e)}
       />
       <TextField
-        id="loginpassword"
+        id="password"
         label="Password"
+        name="password"
         type="password"
         variant="standard"
         required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={formValues.password}
+        onChange={(e) => handleInputChange(e)}
       />
       <Button variant="contained" onClick={signinHandler}>
         Login

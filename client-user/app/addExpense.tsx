@@ -46,7 +46,6 @@ const AddExpense: NextPage = () => {
 
   const successHandler = () => {
     setFormValues(defaultFormValues);
-    console.log('data added');
   };
 
   const handleSubmit = () => {
