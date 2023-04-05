@@ -1,10 +1,12 @@
 'use client';
 
-import AddExpense from './addExpense';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import BasicModal from './addExpenseModal';
+import { BarChart } from './barChart';
+import { Box } from '@mui/material';
 
 export default function Home() {
   const router = useRouter();
@@ -16,5 +18,31 @@ export default function Home() {
     }
   }, []);
 
-  return <div>{user.loggedIn && <AddExpense />}</div>;
+  return (
+    <div>
+      <Box
+        sx={{
+          '& .MuiTextField-root': { m: 2, width: '25ch' },
+          paddingTop: '30px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <BasicModal />
+      </Box>
+      <Box
+        sx={{
+          paddingTop: '30px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <BarChart />
+      </Box>
+    </div>
+  );
 }

@@ -27,6 +27,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 export default function Header() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  console.log(user.loggedIn);
   const router = useRouter();
 
   useEffect(() => {
@@ -61,73 +62,80 @@ export default function Header() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <div>
-            <Button
-              id="fade-button"
-              aria-controls={open ? 'fade-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            >
-              <MenuIcon sx={{ color: 'white' }} />
-            </Button>
-            <Menu
-              id="fade-menu"
-              MenuListProps={{
-                'aria-labelledby': 'fade-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              TransitionComponent={Fade}
-            >
-              <MenuItem
-                onClick={() => {
-                  router.push('/');
-                  handleClose();
-                }}
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <div>
+              <Button
+                id="fade-button"
+                aria-controls={open ? 'fade-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
               >
-                Home
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  router.push('/entries');
-                  handleClose();
-                }}
-              >
-                Entries
-              </MenuItem>
-            </Menu>
-          </div>
-
-          <Box sx={{ maxWidth: '140px', opacity: '100' }}>
-            <Link href="/">
-              <Image src="./logo.png" alt="logo" style={{ opacity: '100' }} />
-            </Link>
-          </Box>
-
-          <Typography sx={{ flexGrow: 1 }}></Typography>
-          <Box sx={{ justifyContent: 'flex-end' }}>
-            {!user.loggedIn ? (
-              <div>
-                <Button color="inherit" onClick={() => router.push('/login')}>
-                  Login
-                </Button>
-                <Button color="inherit" onClick={() => router.push('/signup')}>
-                  Signup
-                </Button>
-              </div>
-            ) : (
-              <Button color="inherit" onClick={logoutHandler}>
-                Logout
+                <MenuIcon sx={{ color: 'white' }} />
               </Button>
-            )}
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+              <Menu
+                id="fade-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'fade-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                TransitionComponent={Fade}
+              >
+                <MenuItem
+                  onClick={() => {
+                    router.push('/');
+                    handleClose();
+                  }}
+                >
+                  Home
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    router.push('/entries');
+                    handleClose();
+                  }}
+                >
+                  Entries
+                </MenuItem>
+              </Menu>
+            </div>
+
+            <Typography
+              variant="h6"
+              component="h1"
+              sx={{ flexGrow: 1, color: 'white' }}
+              onClick={() => router.push('/')}
+            >
+              TRACKER
+            </Typography>
+
+            <Box sx={{ justifyContent: 'flex-end' }}>
+              {!user.loggedIn ? (
+                <div>
+                  <Button color="inherit" onClick={() => router.push('/login')}>
+                    Login
+                  </Button>
+                  <Button
+                    color="inherit"
+                    onClick={() => router.push('/signup')}
+                  >
+                    Signup
+                  </Button>
+                </div>
+              ) : (
+                <Button color="inherit" onClick={logoutHandler}>
+                  Logout
+                </Button>
+              )}
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </>
   );
 }
