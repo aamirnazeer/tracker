@@ -47,11 +47,9 @@ const defaultCatagoryValues = {
   type: '',
 };
 
-interface Props {
-  loggedIn: boolean;
-}
 
-const AddExpenseModal: React.FC<Props> = ({ loggedIn }) => {
+
+const AddExpenseModal = () => {
   const [catagories, setCatagories] = useState([defaultCatagoryValues]);
   const [formValues, setFormValues] = useState(defaultFormValues);
   const [open, setOpen] = useState(false);

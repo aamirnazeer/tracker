@@ -41,11 +41,7 @@ const Data = [
 
 Chart.register(CategoryScale);
 
-interface Props {
-  loggedIn: boolean;
-}
-
-export const BarChart: React.FC<Props> = ({ loggedIn }) => {
+export const BarChart = () => {
   const [chartData, setChartData] = React.useState({
     labels: Data.map((data) => data.year),
     datasets: [
