@@ -1,7 +1,10 @@
+'use client';
+
 import { Bar } from 'react-chartjs-2';
 import React from 'react';
 import { CategoryScale } from 'chart.js';
 import Chart from 'chart.js/auto';
+import { Box } from '@mui/material';
 
 const Data = [
   {
@@ -38,7 +41,11 @@ const Data = [
 
 Chart.register(CategoryScale);
 
-export const BarChart = () => {
+interface Props {
+  loggedIn: boolean;
+}
+
+export const BarChart: React.FC<Props> = ({ loggedIn }) => {
   const [chartData, setChartData] = React.useState({
     labels: Data.map((data) => data.year),
     datasets: [
@@ -59,31 +66,42 @@ export const BarChart = () => {
   });
 
   return (
-    <div
-      style={{
+    <Box
+      sx={{
+        paddingTop: '30px',
         display: 'flex',
-        width: '90%',
-        maxWidth: '800px',
         flexDirection: 'column',
-        flexShrink: 1,
-        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <h2 style={{ textAlign: 'center' }}>Bar Chart</h2>
-      <Bar
-        data={chartData}
-        options={{
-          plugins: {
-            title: {
-              display: true,
-              text: 'Users Gained between 2016-2020',
-            },
-            legend: {
-              display: true,
-            },
-          },
+      <div
+        style={{
+          display: 'flex',
+          width: '90%',
+          maxWidth: '800px',
+          flexDirection: 'column',
+          flexShrink: 1,
+          flexGrow: 1,
         }}
-      />
-    </div>
+      >
+        <Bar
+          data={chartData}
+          options={{
+            plugins: {
+              title: {
+                display: true,
+                text: 'Users Gained between 2016-2020',
+              },
+              legend: {
+                display: false,
+              },
+            },
+          }}
+        />
+      </div>
+    </Box>
   );
 };
+
+export default BarChart;

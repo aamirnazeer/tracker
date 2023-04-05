@@ -27,7 +27,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 export default function Header() {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  console.log(user.loggedIn);
   const router = useRouter();
 
   useEffect(() => {
@@ -88,7 +87,7 @@ export default function Header() {
               >
                 <MenuItem
                   onClick={() => {
-                    router.push('/');
+                    user.loggedIn && router.push('/');
                     handleClose();
                   }}
                 >
@@ -96,7 +95,7 @@ export default function Header() {
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
-                    router.push('/entries');
+                    user.loggedIn && router.push('/entries');
                     handleClose();
                   }}
                 >
@@ -109,7 +108,6 @@ export default function Header() {
               variant="h6"
               component="h1"
               sx={{ flexGrow: 1, color: 'white' }}
-              onClick={() => router.push('/')}
             >
               TRACKER
             </Typography>

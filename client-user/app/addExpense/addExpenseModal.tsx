@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -5,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
-import { axiosInstance } from '../axios/axiosInstance';
+import { axiosInstance } from '../../axios/axiosInstance';
 
 import {
   TextField,
@@ -45,7 +47,11 @@ const defaultCatagoryValues = {
   type: '',
 };
 
-export default function BasicModal() {
+interface Props {
+  loggedIn: boolean;
+}
+
+const AddExpenseModal: React.FC<Props> = ({ loggedIn }) => {
   const [catagories, setCatagories] = useState([defaultCatagoryValues]);
   const [formValues, setFormValues] = useState(defaultFormValues);
   const [open, setOpen] = useState(false);
@@ -82,9 +88,21 @@ export default function BasicModal() {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}>
-        Add Expense
-      </Button>
+      <Box
+        sx={{
+          '& .MuiTextField-root': { m: 2, width: '25ch' },
+          paddingTop: '30px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Button variant="contained" onClick={handleOpen}>
+          Add Expense
+        </Button>
+      </Box>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -145,4 +163,6 @@ export default function BasicModal() {
       </Modal>
     </div>
   );
-}
+};
+
+export default AddExpenseModal;
