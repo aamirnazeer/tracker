@@ -23,12 +23,12 @@ router.put(
   '/api/users',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const id: number = req.body.id;
-    const name: string = req.body.name;
+    const id: string = req.body.id;
+    const firstname: string = req.body.firstname;
     try {
       await prisma.users.update({
         where: { id: id },
-        data: { name: name },
+        data: { firstname: firstname },
       });
       res.status(201).send({ message: 'username updated successfully' });
     } catch (err) {
@@ -42,7 +42,7 @@ router.delete(
   '/api/users',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const id: number = req.body.id;
+    const id: string = req.body.id;
     try {
       await prisma.users.delete({
         where: { id: id },

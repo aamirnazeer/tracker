@@ -2,13 +2,14 @@ import jwt from 'jsonwebtoken';
 
 interface User {
   username: string;
-  id: number;
-  name: string;
+  id: string;
+  firstname: string;
+  lastname: string;
 }
 
 const generateAccessToken = (user: User): string => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '3600s',
+    expiresIn: '600s',
   });
 };
 

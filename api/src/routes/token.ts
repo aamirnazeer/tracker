@@ -25,13 +25,15 @@ router.get('/api/token', async (req: Request, res: Response) => {
     const accessToken = generateAccessToken({
       id: user.id,
       username: user.username,
-      name: user.name,
+      firstname: user.firsname,
+      lastname: user.lastname
     });
     res.cookie('accessToken', accessToken, { httpOnly: true });
     res.status(200).send({
       id: user.id,
       username: user.username,
-      name: user.name,
+      firstname: user.firsname,
+      lastname: user.lastname
     });
   });
 });

@@ -10,21 +10,18 @@ router.post(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const catagoryId: number = req.body.catagoryId;
+    const catagoryId: string = req.body.catagoryId;
     const amount: number = req.body.amount;
     const comments: string = req.body.comments;
+    const currentUserId: string = req.currentUser.id;
 
     try {
       await prisma.entries.create({
         data: {
           amount: amount,
           comments: comments,
-          user: {
-            connect: { id: req.currentUser.id },
-          },
-          catagory: {
-            connect: { id: catagoryId },
-          },
+          userId: currentUserId,
+          catagoryId: catagoryId,
         },
       });
       res.status(201).send({ message: 'entry processed' });
@@ -42,7 +39,7 @@ router.get(
     try {
       const entries = await prisma.entries.findMany({
         where: {
-          user: { id: req.currentUser.id },
+          userId: req.currentUser.id,
         },
       });
       res.status(200).send(entries);
@@ -57,22 +54,19 @@ router.put(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const catagoryId: number = req.body.catagoryId;
+    const catagoryId: string = req.body.catagoryId;
     const amount: number = req.body.amount;
     const comments: string = req.body.comments;
-    const id: number = req.body.id;
+    const id: string = req.body.id;
+    const currentUserId: string = req.currentUser.id;
     try {
       const entry = await prisma.entries.update({
         where: { id: id },
         data: {
           amount: amount,
           comments: comments,
-          user: {
-            connect: { id: req.currentUser.id },
-          },
-          catagory: {
-            connect: { id: catagoryId },
-          },
+          userId: currentUserId,
+          catagoryId: catagoryId,
         },
       });
       res.status(200).send(entry);

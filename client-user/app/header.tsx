@@ -103,16 +103,12 @@ export default function Header() {
                 </MenuItem>
               </Menu>
             </div>
-
-            <Typography
-              variant="h6"
-              component="h1"
-              sx={{ flexGrow: 1, color: 'white' }}
-            >
-              TRACKER
-            </Typography>
-
-            <Box sx={{ justifyContent: 'flex-end' }}>
+            <Button>
+              <Typography variant="h6" component="h1" sx={{ color: 'white' }}>
+                TRACKER
+              </Typography>
+            </Button>
+            <Box sx={{ justifyContent: 'flex-end', marginLeft: 'auto' }}>
               {!user.loggedIn ? (
                 <div>
                   <Button color="inherit" onClick={() => router.push('/login')}>

@@ -43,7 +43,7 @@ router.put(
   '/api/catagories',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const id: number = req.body.id;
+    const id: string = req.body.id;
     const type: string = req.body.type;
     try {
       const catagory = await prisma.catagories.update({
@@ -62,7 +62,7 @@ router.delete(
   '/api/catagories',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const id: number = req.body.id;
+    const id: string = req.body.id;
     try {
       await prisma.catagories.delete({
         where: { id: id },

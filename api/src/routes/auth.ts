@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 router.post('/api/signup', async (req: Request, res: Response) => {
-  const { name, username, password } = req.body;
+  const { firstname, lastname, email, username, password } = req.body;
   try {
     const checkUser = await prisma.users.findUnique({
       where: {
@@ -21,7 +21,9 @@ router.post('/api/signup', async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const addedUser = await prisma.users.create({
       data: {
-        name: name,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
         username: username,
         password: hashedPassword,
       },
@@ -29,10 +31,16 @@ router.post('/api/signup', async (req: Request, res: Response) => {
     const accessToken = generateAccessToken({
       id: addedUser.id,
       username: addedUser.username,
-      name: addedUser.username,
+      firstname: addedUser.firstname,
+      lastname: addedUser.lastname,
     });
     const refreshToken = jwt.sign(
-      { id: addedUser.id, username: addedUser.username, name: addedUser.name },
+      {
+        id: addedUser.id,
+        username: addedUser.username,
+        firstname: addedUser.firstname,
+        lastname: addedUser.lastname,
+      },
       process.env.REFRESH_TOKEN_SECRET
     );
 
@@ -46,8 +54,9 @@ router.post('/api/signup', async (req: Request, res: Response) => {
     res.cookie('refreshToken', refreshToken, { httpOnly: true });
     res.status(201).send({
       id: addedUser.id,
-      name: addedUser.name,
       username: addedUser.username,
+      firstname: addedUser.firstname,
+      lastname: addedUser.lastname,
     });
   } catch (err) {
     console.log(err);
@@ -69,10 +78,16 @@ router.post('/api/login', async (req: Request, res: Response) => {
       const accessToken = generateAccessToken({
         id: user.id,
         username: user.username,
-        name: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
       });
       const refreshToken = jwt.sign(
-        { id: user.id, username: user.username, name: user.name },
+        {
+          id: user.id,
+          username: user.username,
+          firstname: user.firstname,
+          lastname: user.lastname,
+        },
         process.env.REFRESH_TOKEN_SECRET
       );
 
@@ -84,9 +99,12 @@ router.post('/api/login', async (req: Request, res: Response) => {
 
       res.cookie('accessToken', accessToken, { httpOnly: true });
       res.cookie('refreshToken', refreshToken, { httpOnly: true });
-      res
-        .status(200)
-        .send({ id: user.id, name: user.name, username: user.username });
+      res.status(200).send({
+        id: user.id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      });
     } else {
       res.status(400).send({ message: 'incorrect credentials' });
     }
