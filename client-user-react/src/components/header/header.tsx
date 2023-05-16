@@ -14,7 +14,7 @@ import {
   Skeleton,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { logIn } from '../../store/user/userSlice';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = [{ id: 1, name: 'Ledgers', path: '/ledgers' }];
 
 interface LoggedIn {
   loggedIn: boolean | undefined;
@@ -30,7 +30,6 @@ interface LoggedIn {
 
 const Header = ({ loggedIn }: LoggedIn) => {
   const user = useSelector((state: RootState) => state.User);
-  console.log(user)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -81,13 +80,19 @@ const Header = ({ loggedIn }: LoggedIn) => {
     navigate('/login');
   };
 
+  const menuNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <>
       {loggedIn ? (
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
-              <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+              <CurrencyRupeeIcon
+                sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
+              />
               <Typography
                 variant="h6"
                 noWrap
@@ -103,7 +108,7 @@ const Header = ({ loggedIn }: LoggedIn) => {
                   textDecoration: 'none',
                 }}
               >
-                LOGO
+                HISAB
               </Typography>
 
               <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -136,13 +141,15 @@ const Header = ({ loggedIn }: LoggedIn) => {
                   }}
                 >
                   {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                      <Typography textAlign="center">{page}</Typography>
+                    <MenuItem key={page.id} onClick={() => navigate(page.path)}>
+                      <Typography textAlign="center">{page.name}</Typography>
                     </MenuItem>
                   ))}
                 </Menu>
               </Box>
-              <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+              <CurrencyRupeeIcon
+                sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }}
+              />
               <Typography
                 variant="h5"
                 noWrap
@@ -159,23 +166,23 @@ const Header = ({ loggedIn }: LoggedIn) => {
                   textDecoration: 'none',
                 }}
               >
-                LOGO
+                HISAB
               </Typography>
               <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                 {pages.map((page) => (
                   <Button
-                    key={page}
-                    onClick={handleCloseNavMenu}
+                    key={page.id}
+                    onClick={() => navigate(page.path)}
                     sx={{ my: 2, color: 'white', display: 'block' }}
                   >
-                    {page}
+                    {page.name}
                   </Button>
                 ))}
               </Box>
 
               <Box sx={{ flexGrow: 0 }}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="" >{user.firstname[0].toUpperCase()}</Avatar>
+                  <Avatar>{user.firstname[0].toUpperCase()}</Avatar>
                 </IconButton>
                 <Menu
                   sx={{ mt: '45px' }}

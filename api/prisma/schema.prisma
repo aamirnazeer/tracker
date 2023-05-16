@@ -28,13 +28,25 @@ model catagories {
   entries entries[]
 }
 
+model ledgers {
+  id    String @id @default(uuid())
+  name  String @db.VarChar(500)
+  owner String @db.VarChar(100)
+}
+
+model ledgeracess {
+  id       String @id @default(uuid())
+  ledgerid String @db.VarChar(100)
+  userid   String @db.VarChar(100)
+}
+
 model entries {
   id         String     @id @default(uuid())
   date       DateTime   @default(now())
   amount     Int        @db.Int
   catagory   catagories @relation(fields: [catagoryId], references: [id])
-  catagoryId String     @db.VarChar(20)
+  catagoryId String     @db.VarChar(100)
   comments   String     @db.VarChar(500)
   user       users      @relation(fields: [userId], references: [id])
-  userId     String     @db.VarChar(20)
+  userId     String     @db.VarChar(100)
 }

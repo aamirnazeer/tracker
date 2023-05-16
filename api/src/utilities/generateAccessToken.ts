@@ -9,7 +9,7 @@ interface User {
 
 const generateAccessToken = (user: User): string => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '600s',
+    expiresIn: '10s',
   });
 };
 

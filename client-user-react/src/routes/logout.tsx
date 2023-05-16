@@ -3,6 +3,7 @@ import axios from 'axios';
 import { logOut } from '../store/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Skeleton } from '@mui/material';
 
 const LogOut = () => {
   const dispatch = useDispatch();
@@ -16,13 +17,12 @@ const LogOut = () => {
         dispatch(logOut());
         navigate('/login');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        navigate('/');
+      });
   }, []);
-  return (
-    <>
-      <h1>logoutpage</h1>
-    </>
-  );
+  return <Skeleton />;
 };
 
 export default LogOut;

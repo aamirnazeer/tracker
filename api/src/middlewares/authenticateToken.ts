@@ -41,7 +41,7 @@ export const authenticateToken = (
                 const accessToken = generateAccessToken({
                   id: user.id,
                   username: user.username,
-                  firstname: user.firsname,
+                  firstname: user.firstname,
                   lastname: user.lastname,
                 });
                 res.cookie('accessToken', accessToken, { httpOnly: true });
