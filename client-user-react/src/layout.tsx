@@ -1,11 +1,16 @@
 import Header from './components/header/header';
-import { JsxChild } from './types/jsxChild';
+import { Skeleton } from '@mui/material';
 
-const Layout: React.FC<JsxChild> = ({ children }) => {
+interface Layout {
+  children: React.ReactNode;
+  loggedIn?: boolean;
+}
+
+const Layout = ({ loggedIn, children }: Layout) => {
   return (
     <div>
-      <Header />
-      {children}
+      <Header loggedIn={loggedIn}/>
+      {loggedIn ? children : <Skeleton />}
     </div>
   );
 };

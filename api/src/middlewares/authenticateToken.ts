@@ -45,7 +45,6 @@ export const authenticateToken = (
                   lastname: user.lastname,
                 });
                 res.cookie('accessToken', accessToken, { httpOnly: true });
-                console.log('new token generated');
                 req.currentUser = user;
                 next();
               }
@@ -55,7 +54,6 @@ export const authenticateToken = (
           return res.status(401).send({ message: 'authentication failed' });
         }
       } else {
-        console.log('old token fine');
         req.currentUser = user;
         next();
       }

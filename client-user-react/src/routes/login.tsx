@@ -6,15 +6,34 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { logIn } from '../store/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const LogIn = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const user = useSelector((state: RootState) => state.User);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get('username'),
-      password: data.get('password'),
-    });
+    axios
+      .post(
+        'http://localhost:5000/api/login',
+        {
+          username: data.get('username'),
+          password: data.get('password'),
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        dispatch(logIn(res.data));
+        navigate('/');
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

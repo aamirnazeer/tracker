@@ -57,6 +57,7 @@ router.post('/api/signup', async (req: Request, res: Response) => {
       username: addedUser.username,
       firstname: addedUser.firstname,
       lastname: addedUser.lastname,
+      email: addedUser.email
     });
   } catch (err) {
     console.log(err);
@@ -104,6 +105,7 @@ router.post('/api/login', async (req: Request, res: Response) => {
         username: user.username,
         firstname: user.firstname,
         lastname: user.lastname,
+        email: user.email
       });
     } else {
       res.status(400).send({ message: 'incorrect credentials' });
