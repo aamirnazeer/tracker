@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   AppBar,
   Box,
@@ -11,49 +10,45 @@ import {
   Avatar,
   Button,
   MenuItem,
-  Skeleton,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RootState } from '../../store/store';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { logIn } from '../../store/user/userSlice';
+import { useGetCurrentUserQuery } from '../../store/user/userSlice';
 
 const pages = [{ id: 1, name: 'Ledgers', path: '/ledgers' }];
 
 interface LoggedIn {
-  loggedIn: boolean | undefined;
+  loggedIn: boolean;
 }
 
-const Header = ({ loggedIn }: LoggedIn) => {
-  const user = useSelector((state: RootState) => state.User);
-
+const Header = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const { data: userData, error, isLoading } = useGetCurrentUserQuery();
+  // error && navigate('/login');
 
-  useEffect(() => {
-    if (!user.loggedIn) {
-      axios
-        .get('http://localhost:5000/api/currentuser', {
-          withCredentials: true,
-        })
-        .then((res) => dispatch(logIn(res.data)))
-        .catch((err) => {
-          console.log(err.response.status);
-          navigate('/login');
-        });
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   navigate('/login');
+  // }, [loggedIn]);
+
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  // useEffect(() => {
+  //   if (!user.loggedIn) {
+  //     axios
+  //       .get('http://localhost:5000/api/currentuser', {
+  //         withCredentials: true,
+  //       })
+  //       .then((res) => dispatch(logIn(res.data)))
+  //       .catch((err) => {
+  //         console.log(err.response.status);
+  //         navigate('/login');
+  //       });
+  //   }
+  // }, [user]);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -80,13 +75,9 @@ const Header = ({ loggedIn }: LoggedIn) => {
     navigate('/login');
   };
 
-  const menuNavigation = (path: string) => {
-    navigate(path);
-  };
-
   return (
     <>
-      {loggedIn ? (
+      {
         <AppBar position="static">
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -182,7 +173,9 @@ const Header = ({ loggedIn }: LoggedIn) => {
 
               <Box sx={{ flexGrow: 0 }}>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar>{user.firstname[0].toUpperCase()}</Avatar>
+                  <Avatar>
+                    {userData ? userData.firstname[0].toUpperCase() : ''}
+                  </Avatar>
                 </IconButton>
                 <Menu
                   sx={{ mt: '45px' }}
@@ -200,12 +193,12 @@ const Header = ({ loggedIn }: LoggedIn) => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {user.loggedIn && (
+                  {userData && (
                     <MenuItem onClick={logoutHandler}>
                       <Typography textAlign="center">Logout</Typography>
                     </MenuItem>
                   )}
-                  {!user.loggedIn && (
+                  {!userData && (
                     <MenuItem onClick={loginHandler}>
                       <Typography textAlign="center">Login</Typography>
                     </MenuItem>
@@ -215,9 +208,7 @@ const Header = ({ loggedIn }: LoggedIn) => {
             </Toolbar>
           </Container>
         </AppBar>
-      ) : (
-        <Skeleton />
-      )}
+      }
     </>
   );
 };

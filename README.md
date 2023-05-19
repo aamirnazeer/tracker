@@ -1,6 +1,6 @@
 # Tracker
 
-Expense Tracker is a full-stack web application built using TypeScript, Node.js, Next.js, MongoDB, and Material UI. It helps users track their expenses by categorizing them and generating a report at the user's request.
+Expense Tracker is a full-stack web application built using TypeScript, Node.js, React.js, MongoDB, and Material UI. It helps users track their expenses by categorizing them and generating a report at the user's request.
 
 The project is open source and hosted on GitHub [here][git-repo-url].
 
@@ -16,7 +16,7 @@ The project is open source and hosted on GitHub [here][git-repo-url].
 
 - TypeScript
 - Node.js
-- Next.js
+- React.js
 - MySQL
 - Material UI
 - JWT

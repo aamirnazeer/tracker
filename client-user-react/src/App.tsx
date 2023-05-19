@@ -10,37 +10,43 @@ import Layout from './layout.tsx';
 import LogOut from './routes/logout.tsx';
 import Ledgers from './routes/ledgers/ledgers.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
-
-import { useSelector } from 'react-redux';
-import { RootState } from './store/store.ts';
-
+import LayoutInverse from './layoutInverse.tsx';
+import NotFoundPage from './routes/notfound.tsx';
 const App = () => {
-  const user = useSelector((state: RootState) => state.User);
-
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Layout loggedIn={user.loggedIn} children={<Home />} />,
+      element: <Layout children={<Home />} />,
       errorElement: <ErrorPage />,
     },
     {
       path: '/ledgers',
-      element: <Layout loggedIn={user.loggedIn} children={<Ledgers />} />,
+      element: <Layout children={<Ledgers />} />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '/ledgers/part1',
+      element: <Layout children={<Ledgers />} />,
       errorElement: <ErrorPage />,
     },
     {
       path: '/login',
-      element: <LoginPage />,
+      element: <LayoutInverse children={<LoginPage />} />,
       errorElement: <ErrorPage />,
     },
     {
       path: '/signup',
-      element: <SignUp />,
+      element: <LayoutInverse children={<SignUp />} />,
       errorElement: <ErrorPage />,
     },
     {
       path: '/logout',
       element: <LogOut />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: '*',
+      element: <Layout children={<NotFoundPage />} />,
       errorElement: <ErrorPage />,
     },
   ]);

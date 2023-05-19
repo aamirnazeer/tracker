@@ -1,28 +1,26 @@
 import { useEffect } from 'react';
-import axios from 'axios';
-import { logOut } from '../store/user/userSlice';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Skeleton } from '@mui/material';
+import { useSignoutMutation } from '../store/user/userSlice';
+import Loader from '../components/loader/loader';
 
 const LogOut = () => {
-  const dispatch = useDispatch();
+  const [signout, { data: signoutResponse, isLoading, isError }] =
+    useSignoutMutation();
   const navigate = useNavigate();
+  const logOut = async () => {
+    try {
+      await signout();
+      console.log(signoutResponse);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .delete('http://localhost:5000/api/logout', {
-        withCredentials: true,
-      })
-      .then(() => {
-        dispatch(logOut());
-        navigate('/login');
-      })
-      .catch((err) => {
-        console.log(err)
-        navigate('/');
-      });
+    logOut();
   }, []);
-  return <Skeleton />;
+  return <Loader />;
 };
 
 export default LogOut;

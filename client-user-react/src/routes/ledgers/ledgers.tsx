@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Container } from '@mui/material';
 
 interface ILedger {
@@ -10,12 +9,7 @@ interface ILedger {
 
 const Ledgers = () => {
   const [ledgers, setLedgers] = useState<ILedger[]>([]);
-  useEffect(() => {
-    axios
-      .get('http://localhost:5000/api/ledgers', { withCredentials: true })
-      .then((res) => setLedgers(res.data))
-      .catch((err) => console.log(err));
-  },[]);
+
   return (
     <Container maxWidth="xl">
       {ledgers.map((el) => {
