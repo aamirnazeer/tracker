@@ -4,19 +4,16 @@ import { useSignoutMutation } from '../store/user/userSlice';
 import Loader from '../components/loader/loader';
 
 const LogOut = () => {
-  const [signout, { data: signoutResponse, isLoading, isError }] =
-    useSignoutMutation();
+  const [signout] = useSignoutMutation();
   const navigate = useNavigate();
   const logOut = async () => {
     try {
       await signout();
-      console.log(signoutResponse);
       navigate('/');
     } catch (error) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     logOut();
   }, []);
