@@ -38,19 +38,29 @@ export const authenticateToken = (
               refreshToken,
               process.env.REFRESH_TOKEN_SECRET,
               (err, user) => {
-                const accessToken = generateAccessToken({
-                  id: user.id,
-                  username: user.username,
-                  firstname: user.firstname,
-                  lastname: user.lastname,
-                });
-                res.cookie('accessToken', accessToken, { httpOnly: true });
-                req.currentUser = user;
-                next();
+                if (err) {
+                  res.clearCookie('accessToken');
+                  res.clearCookie('refreshToken');
+                  return res
+                    .status(401)
+                    .send({ message: 'refresh token auth failure' });
+                } else {
+                  const accessToken = generateAccessToken({
+                    id: user.id,
+                    username: user.username,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                  });
+                  res.cookie('accessToken', accessToken, { httpOnly: true });
+                  req.currentUser = user;
+                  next();
+                }
               }
             );
           }
         } else {
+          res.clearCookie('accessToken');
+          res.clearCookie('refreshToken');
           return res.status(401).send({ message: 'authentication failed' });
         }
       } else {
