@@ -10,17 +10,15 @@ router.post(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const catagoryId: string = req.body.catagoryId;
-    const amount: number = req.body.amount;
-    const comments: string = req.body.comments;
-    const currentUserId: string = req.currentUser.id;
-
+    const { catagoryId, amount, comments, currentUserId, ledgerId } = req.body;
     try {
       await prisma.entries.create({
         data: {
           amount: amount,
           comments: comments,
           userId: currentUserId,
+          typeId: catagoryId,
+          ledgerId: ledgerId,
           catagoryId: catagoryId,
         },
       });
@@ -54,11 +52,9 @@ router.put(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const catagoryId: string = req.body.catagoryId;
-    const amount: number = req.body.amount;
-    const comments: string = req.body.comments;
-    const id: string = req.body.id;
-    const currentUserId: string = req.currentUser.id;
+    const { catagoryId, amount, comments, currentUserId, ledgerId, id } =
+      req.body;
+
     try {
       const entry = await prisma.entries.update({
         where: { id: id },
@@ -67,6 +63,7 @@ router.put(
           comments: comments,
           userId: currentUserId,
           catagoryId: catagoryId,
+          ledgerId: ledgerId,
         },
       });
       res.status(200).send(entry);
@@ -83,10 +80,11 @@ router.delete(
   async (req: Request, res: Response) => {
     const { id } = req.body;
     try {
-      await prisma.entries.delete({
+      await prisma.entries.update({
         where: {
           id: id,
         },
+        data: { isDeleted: 1 },
       });
       res.status(200).send({ message: 'entry deleted successfully' });
     } catch (err) {

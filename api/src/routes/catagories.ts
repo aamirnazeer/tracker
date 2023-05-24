@@ -11,10 +11,11 @@ router.post(
   authenticateToken,
   async (req: Request, res: Response) => {
     try {
-      const { type } = req.body;
+      const { type, ledgerid } = req.body;
       await prisma.catagories.create({
         data: {
           type: type,
+          ledgerid: ledgerid,
         },
       });
       res.status(201).send({ message: 'new type added' });

@@ -36,9 +36,10 @@ model catagories {
 model ledgers {
   id          String        @id @default(uuid())
   name        String        @db.VarChar(500)
-  owner       users         @relation(fields: [ownderId], references: [id])
-  ownderId    String        @db.VarChar(100)
+  owner       users         @relation(fields: [ownerId], references: [id])
+  ownerId     String        @db.VarChar(100)
   isDeleted   Int           @default(0)
+  type        Int           @db.Int
   ledgeracess ledgeracess[]
   entries     entries[]
 }

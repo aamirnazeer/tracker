@@ -10,14 +10,13 @@ router.post(
   '/api/ledgers',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const name: string = req.body.name;
-    const owner: string = req.body.owner;
-
+    const { name, ownerId, type } = req.body;
     try {
       await prisma.ledgers.create({
         data: {
           name: name,
-          owner: owner,
+          ownerId: ownerId,
+          type: type,
         },
       });
       res.status(201).send({ message: 'ledger created' });
@@ -35,7 +34,7 @@ router.get(
     try {
       const ledgers = await prisma.ledgers.findMany({
         where: {
-          owner: req.currentUser.id,
+          ownerId: req.currentUser.id,
         },
       });
       res.status(200).send(ledgers);
@@ -52,14 +51,14 @@ router.put(
   async (req: Request, res: Response) => {
     const id: string = req.body.id;
     const name: string = req.body.name;
-    const owner: string = req.body.owner;
-    
+    const ownerId: string = req.body.owner;
+
     try {
       const ledgers = await prisma.ledgers.update({
         where: { id: id },
         data: {
           name: name,
-          owner: owner,
+          ownerId: ownerId,
         },
       });
       res.status(200).send(ledgers);
@@ -76,10 +75,11 @@ router.delete(
   async (req: Request, res: Response) => {
     const { id } = req.body;
     try {
-      await prisma.ledgers.delete({
+      await prisma.ledgers.update({
         where: {
           id: id,
         },
+        data: { isDeleted: 1 },
       });
       res.status(200).send({ message: 'ledger deleted successfully' });
     } catch (err) {

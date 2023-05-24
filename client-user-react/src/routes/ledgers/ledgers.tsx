@@ -1,26 +1,23 @@
-import { useEffect, useState } from 'react';
 import { Container } from '@mui/material';
-
-interface ILedger {
-  id: string;
-  name: string;
-  owner: string;
-}
+import { useGetLedgersQuery } from '../../store/ledger/ledgerSlice';
+import BackDropLoader from '../../components/backdropLoader/backdropLoader';
 
 const Ledgers = () => {
-  const [ledgers, setLedgers] = useState<ILedger[]>([]);
+  const { data: LedgerData, error, isLoading } = useGetLedgersQuery();
 
   return (
     <Container maxWidth="xl">
-      {ledgers.map((el) => {
-        return (
-          <div key={el.id}>
-            <h1>{el.id}</h1>
-            <h2>{el.name}</h2>
-            <h3>{el.owner}</h3>
-          </div>
-        );
-      })}
+      {isLoading && <BackDropLoader />}
+      {!error &&
+        (LedgerData || []).map((el) => {
+          return (
+            <div key={el.id}>
+              <h1>{el.id}</h1>
+              <h2>{el.name}</h2>
+              <h3>{el.ownerId}</h3>
+            </div>
+          );
+        })}
     </Container>
   );
 };
