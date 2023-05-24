@@ -8,13 +8,16 @@ datasource db {
 }
 
 model users {
-  id        String    @id @default(uuid())
-  firstname String    @db.VarChar(45)
-  lastname  String    @db.VarChar(45)
-  email     String    @unique(map: "email_UNIQUE") @db.VarChar(45)
-  username  String    @unique(map: "username_UNIQUE") @db.VarChar(45)
-  password  String    @db.VarChar(500)
-  entries   entries[]
+  id          String        @id @default(uuid())
+  firstname   String        @db.VarChar(45)
+  lastname    String        @db.VarChar(45)
+  email       String        @unique(map: "email_UNIQUE") @db.VarChar(45)
+  username    String        @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password    String        @db.VarChar(500)
+  isDeleted   Int           @default(0)
+  entries     entries[]
+  ledgers     ledgers[]
+  ledgeracess ledgeracess[]
 }
 
 model refreshtokens {
@@ -23,30 +26,50 @@ model refreshtokens {
 }
 
 model catagories {
-  id      String    @id @default(uuid())
-  type    String    @unique(map: "type_UNIQUE") @db.VarChar(500)
-  entries entries[]
+  id        String    @id @default(uuid())
+  type      String    @db.VarChar(500)
+  ledgerid  String    @db.VarChar(100)
+  isDeleted Int       @default(0)
+  entries   entries[]
 }
 
 model ledgers {
-  id    String @id @default(uuid())
-  name  String @db.VarChar(500)
-  owner String @db.VarChar(100)
+  id          String        @id @default(uuid())
+  name        String        @db.VarChar(500)
+  owner       users         @relation(fields: [ownderId], references: [id])
+  ownderId    String        @db.VarChar(100)
+  isDeleted   Int           @default(0)
+  ledgeracess ledgeracess[]
+  entries     entries[]
 }
 
 model ledgeracess {
-  id       String @id @default(uuid())
-  ledgerid String @db.VarChar(100)
-  userid   String @db.VarChar(100)
+  id        String  @id @default(uuid())
+  ledger    ledgers @relation(fields: [ledgerid], references: [id])
+  ledgerid  String  @db.VarChar(100)
+  users     users   @relation(fields: [userid], references: [id])
+  userid    String  @db.VarChar(100)
+  isDeleted Int     @default(0)
+}
+
+model transactionType {
+  id      String    @id @default(uuid())
+  type    String    @unique(map: "email_UNIQUE") @db.VarChar(45)
+  entries entries[]
 }
 
 model entries {
-  id         String     @id @default(uuid())
-  date       DateTime   @default(now())
-  amount     Int        @db.Int
-  catagory   catagories @relation(fields: [catagoryId], references: [id])
-  catagoryId String     @db.VarChar(100)
-  comments   String     @db.VarChar(500)
-  user       users      @relation(fields: [userId], references: [id])
-  userId     String     @db.VarChar(100)
+  id         String          @id @default(uuid())
+  date       DateTime        @default(now())
+  amount     Int             @db.Int
+  typeId     String          @db.VarChar(100)
+  type       transactionType @relation(fields: [typeId], references: [id])
+  ledgerId   String          @db.VarChar(100)
+  ledger     ledgers         @relation(fields: [ledgerId], references: [id])
+  catagory   catagories      @relation(fields: [catagoryId], references: [id])
+  catagoryId String          @db.VarChar(100)
+  comments   String          @db.VarChar(500)
+  user       users           @relation(fields: [userId], references: [id])
+  userId     String          @db.VarChar(100)
+  isDeleted  Int             @default(0)
 }

@@ -21,7 +21,7 @@ export const currentUserApi = createApi({
       }),
       providesTags: ['CurrentUser'],
     }),
-    login: builder.mutation<IUser, ILoginValues>({
+    signin: builder.mutation<IUser, ILoginValues>({
       query: (user) => ({
         url: 'login',
         method: 'POST',
@@ -51,7 +51,7 @@ export const currentUserApi = createApi({
 // auto-generated based on the defined endpoints
 export const {
   useGetCurrentUserQuery,
-  useLoginMutation,
+  useSigninMutation,
   useSignupMutation,
   useSignoutMutation,
 } = currentUserApi;

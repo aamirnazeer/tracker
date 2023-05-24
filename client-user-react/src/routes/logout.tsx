@@ -9,7 +9,9 @@ const LogOut = () => {
   const logOut = async () => {
     try {
       await signout();
-      navigate('/');
+      setTimeout(() => {
+        navigate('/login');
+      }, 100);
     } catch (error) {
       console.log(error);
     }
