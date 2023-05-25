@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Ledger, NewLedgerForm } from '../../types/ledger';
+import { Ledger, NewLedgerForm, DeleteLedger } from '../../types/ledger';
 
 // Define a service using a base URL and expected endpoints
 export const ledgerApi = createApi({
@@ -24,9 +24,21 @@ export const ledgerApi = createApi({
       }),
       invalidatesTags: ['Ledger'],
     }),
+    deleteLedger: builder.mutation<void, DeleteLedger>({
+      query: (ledger) => ({
+        url: 'ledgers',
+        method: 'DELETE',
+        body: ledger,
+      }),
+      invalidatesTags: ['Ledger'],
+    }),
   }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetLedgersQuery, useCreateLedgerMutation } = ledgerApi;
+export const {
+  useGetLedgersQuery,
+  useCreateLedgerMutation,
+  useDeleteLedgerMutation,
+} = ledgerApi;

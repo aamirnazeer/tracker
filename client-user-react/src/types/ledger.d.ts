@@ -11,3 +11,7 @@ export type NewLedgerForm = {
   name: FormDataEntryValue | null;
   type: number | null;
 };
+
+export type DeleteLedger = {
+  id: string;
+};
