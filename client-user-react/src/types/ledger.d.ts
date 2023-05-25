@@ -4,4 +4,10 @@ export type Ledger = {
   ownerId: string;
   isDeleted: number;
   type: number;
+  owner: { username: string };
+};
+
+export type NewLedgerForm = {
+  name: FormDataEntryValue | null;
+  type: number | null;
 };

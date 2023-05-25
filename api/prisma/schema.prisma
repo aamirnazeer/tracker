@@ -8,16 +8,25 @@ datasource db {
 }
 
 model users {
-  id          String        @id @default(uuid())
-  firstname   String        @db.VarChar(45)
-  lastname    String        @db.VarChar(45)
-  email       String        @unique(map: "email_UNIQUE") @db.VarChar(45)
-  username    String        @unique(map: "username_UNIQUE") @db.VarChar(45)
-  password    String        @db.VarChar(500)
-  isDeleted   Int           @default(0)
-  entries     entries[]
-  ledgers     ledgers[]
-  ledgeracess ledgeracess[]
+  id                String              @id @default(uuid())
+  firstname         String              @db.VarChar(45)
+  lastname          String              @db.VarChar(45)
+  email             String              @unique(map: "email_UNIQUE") @db.VarChar(45)
+  username          String              @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password          String              @db.VarChar(500)
+  isDeleted         Int                 @default(0)
+  entries           entries[]
+  ledgers           ledgers[]
+  ledgeracess       ledgeracess[]
+  defaultuserledger defaultuserledger[]
+}
+
+model defaultuserledger {
+  id       String  @id @default(uuid())
+  userId   String  @db.VarChar(100)
+  user     users   @relation(fields: [userId], references: [id])
+  ledgerId String  @db.VarChar(100)
+  ledger   ledgers @relation(fields: [ledgerId], references: [id])
 }
 
 model refreshtokens {
@@ -28,20 +37,24 @@ model refreshtokens {
 model catagories {
   id        String    @id @default(uuid())
   type      String    @db.VarChar(500)
+  ledger    ledgers   @relation(fields: [ledgerid], references: [id])
   ledgerid  String    @db.VarChar(100)
   isDeleted Int       @default(0)
   entries   entries[]
 }
 
 model ledgers {
-  id          String        @id @default(uuid())
-  name        String        @db.VarChar(500)
-  owner       users         @relation(fields: [ownerId], references: [id])
-  ownerId     String        @db.VarChar(100)
-  isDeleted   Int           @default(0)
-  type        Int           @db.Int
-  ledgeracess ledgeracess[]
-  entries     entries[]
+  id                String              @id @default(uuid())
+  name              String              @db.VarChar(500)
+  owner             users               @relation(fields: [ownerId], references: [id])
+  ownerId           String              @db.VarChar(100)
+  isDeleted         Int                 @default(0)
+  type              Int                 @db.Int
+  date              DateTime            @default(now())
+  ledgeracess       ledgeracess[]
+  entries           entries[]
+  defaultuserledger defaultuserledger[]
+  catagories        catagories[]
 }
 
 model ledgeracess {

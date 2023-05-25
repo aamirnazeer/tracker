@@ -10,12 +10,12 @@ router.post(
   '/api/ledgers',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const { name, ownerId, type } = req.body;
+    const { name, type } = req.body;
     try {
       await prisma.ledgers.create({
         data: {
           name: name,
-          ownerId: ownerId,
+          ownerId: req.currentUser.id,
           type: type,
         },
       });
@@ -35,7 +35,20 @@ router.get(
       const ledgers = await prisma.ledgers.findMany({
         where: {
           ownerId: req.currentUser.id,
+          isDeleted: 0,
         },
+        include: {
+          owner: {
+            select: {
+              username: true,
+            },
+          },
+        },
+        orderBy: [
+          {
+            date: 'desc',
+          },
+        ],
       });
       res.status(200).send(ledgers);
     } catch (err) {

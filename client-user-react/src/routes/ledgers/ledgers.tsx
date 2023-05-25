@@ -1,23 +1,19 @@
 import { Container } from '@mui/material';
 import { useGetLedgersQuery } from '../../store/ledger/ledgerSlice';
 import BackDropLoader from '../../components/backdropLoader/backdropLoader';
+import LedgerHolder from './ledgerHolder';
+import AddNewModalLedger from './addNewLedgerModal';
+import ErrorPage from '../../errorPage';
 
 const Ledgers = () => {
-  const { data: LedgerData, error, isLoading } = useGetLedgersQuery();
+  const { data: ledgerData, error, isLoading } = useGetLedgersQuery();
 
   return (
     <Container maxWidth="xl">
       {isLoading && <BackDropLoader />}
-      {!error &&
-        (LedgerData || []).map((el) => {
-          return (
-            <div key={el.id}>
-              <h1>{el.id}</h1>
-              <h2>{el.name}</h2>
-              <h3>{el.ownerId}</h3>
-            </div>
-          );
-        })}
+      {!error && <AddNewModalLedger />}
+      {!error && <LedgerHolder ledgerData={ledgerData} />}
+      {error && <ErrorPage />}
     </Container>
   );
 };
