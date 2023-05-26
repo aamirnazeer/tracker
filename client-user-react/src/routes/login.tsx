@@ -22,14 +22,13 @@ const LogIn = () => {
     const data = new FormData(event.currentTarget);
 
     try {
-      const res = await login({
+      await login({
         username: data.get('username'),
         password: data.get('password'),
       });
-      console.log(res);
       setTimeout(() => {
         navigate('/');
-      }, 100);
+      }, 5000);
     } catch (error) {
       console.log(error);
       setLoading(false);

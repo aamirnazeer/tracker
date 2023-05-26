@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Ledger, NewLedgerForm, DeleteLedger } from '../../types/ledger';
+import {
+  Ledger,
+  NewLedgerForm,
+  DeleteLedger,
+  LedgerAccessCreate,
+  LedgerWithAccess,
+  LedgerAccessUpdate,
+} from '../../types/ledger';
 
 // Define a service using a base URL and expected endpoints
 export const ledgerApi = createApi({
@@ -8,7 +15,7 @@ export const ledgerApi = createApi({
     baseUrl: 'http://localhost:5000/api/',
     credentials: 'include',
   }),
-  tagTypes: ['Ledger'],
+  tagTypes: ['Ledger', 'LedgerAccess'],
   endpoints: (builder) => ({
     getLedgers: builder.query<Ledger[], void>({
       query: () => ({
@@ -32,6 +39,26 @@ export const ledgerApi = createApi({
       }),
       invalidatesTags: ['Ledger'],
     }),
+    getLedgerAcess: builder.query<LedgerWithAccess[], number>({
+      query: (id) => ({ url: `ledgeraccess/${id}` }),
+      providesTags: ['LedgerAccess'],
+    }),
+    addLedgerAccess: builder.mutation<void, LedgerAccessCreate>({
+      query: (id) => ({
+        url: `ledgeraccess`,
+        method: 'POST',
+        body: id,
+      }),
+      invalidatesTags: ['LedgerAccess'],
+    }),
+    updateLedgerAccess: builder.mutation<void, LedgerAccessUpdate>({
+      query: (id) => ({
+        url: `ledgeraccess`,
+        method: 'PUT',
+        body: id,
+      }),
+      invalidatesTags: ['LedgerAccess'],
+    }),
   }),
 });
 
@@ -41,4 +68,7 @@ export const {
   useGetLedgersQuery,
   useCreateLedgerMutation,
   useDeleteLedgerMutation,
+  useGetLedgerAcessQuery,
+  useAddLedgerAccessMutation,
+  useUpdateLedgerAccessMutation,
 } = ledgerApi;

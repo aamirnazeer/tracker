@@ -8,6 +8,7 @@ import Loader from './components/loader/loader';
 const Layout = ({ children }: JsxChild) => {
   const navigate = useNavigate();
   const { error, isLoading } = useGetCurrentUserQuery();
+  console.log(error, isLoading);
   useEffect(() => {
     if (error) {
       navigate('/login');

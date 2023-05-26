@@ -4,11 +4,12 @@ import CardContent from '@mui/material/CardContent';
 import { IconButton, Tooltip, useMediaQuery } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import ShareIcon from '@mui/icons-material/Share';
 import Typography from '@mui/material/Typography';
 import { Ledger } from '../../types/ledger';
 import { SetStateAction, useState } from 'react';
-import DeleteLedgerModal from './deleteLedgerModal';
-
+import DeleteLedgerDialog from './deleteLedgerDialog';
+import ShareLedgerDialog from './shareLedgerDialog';
 interface L {
   data: Ledger;
 }
@@ -16,11 +17,17 @@ interface L {
 const BasicCard: React.FC<L> = ({ data }) => {
   const matches = useMediaQuery('(min-width:600px)');
   const [deletePopup, setDeletePopUp] = useState(false);
+  const [sharePopup, setSharePopUp] = useState(false);
   const [dialogData, setDialogData] = useState({});
 
   const deleteHandler = (data: Ledger) => {
     setDialogData(data);
     setDeletePopUp(true);
+  };
+
+  const shareHandler = (data: Ledger) => {
+    setDialogData(data);
+    setSharePopUp(true);
   };
   return (
     <Card
@@ -31,11 +38,15 @@ const BasicCard: React.FC<L> = ({ data }) => {
       }}
       variant="outlined"
     >
-      <DeleteLedgerModal
+      <DeleteLedgerDialog
         data={dialogData}
         show={deletePopup}
         setDeletePopUp={setDeletePopUp}
       />
+      {sharePopup && (
+        <ShareLedgerDialog ledgerData={dialogData} setSharePopUp={setSharePopUp} />
+      )}
+
       <CardContent>
         <Typography variant="h5" component="div">
           {data.name}
@@ -59,6 +70,12 @@ const BasicCard: React.FC<L> = ({ data }) => {
         <Tooltip title="Delete">
           <IconButton onClick={() => deleteHandler(data)}>
             <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Share">
+          <IconButton onClick={() => shareHandler(data)}>
+            <ShareIcon />
           </IconButton>
         </Tooltip>
       </CardActions>

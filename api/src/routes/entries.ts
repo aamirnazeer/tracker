@@ -10,14 +10,21 @@ router.post(
   '/api/entries',
   authenticateToken,
   async (req: Request, res: Response) => {
-    const { catagoryId, amount, comments, currentUserId, ledgerId } = req.body;
+    const {
+      catagoryId,
+      amount,
+      comments,
+      currentUserId,
+      ledgerId,
+      transactionType,
+    } = req.body;
     try {
       await prisma.entries.create({
         data: {
           amount: amount,
           comments: comments,
           userId: currentUserId,
-          typeId: catagoryId,
+          transactionType: transactionType,
           ledgerId: ledgerId,
           catagoryId: catagoryId,
         },

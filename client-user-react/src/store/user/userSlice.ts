@@ -4,6 +4,8 @@ import {
   ILoginValues,
   ISignUpValues,
   ISignoutResponse,
+  ValidateUser,
+  UserResponseValidation,
 } from '../../types/user';
 
 // Define a service using a base URL and expected endpoints
@@ -44,6 +46,13 @@ export const currentUserApi = createApi({
       }),
       invalidatesTags: ['CurrentUser'],
     }),
+    getUserValidated: builder.mutation<UserResponseValidation, ValidateUser>({
+      query: (user) => ({
+        url: 'users',
+        method: 'POST',
+        body: user,
+      }),
+    }),
   }),
 });
 
@@ -54,4 +63,5 @@ export const {
   useSigninMutation,
   useSignupMutation,
   useSignoutMutation,
+  useGetUserValidatedMutation,
 } = currentUserApi;

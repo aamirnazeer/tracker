@@ -5,6 +5,12 @@ export interface IUser {
   username: string;
 }
 
+type UserResponseValidation = {
+  data: {
+    id: string;
+  };
+};
+
 export interface ILoginValues {
   username: FormDataEntryValue | null;
   password: FormDataEntryValue | null;
@@ -22,3 +28,7 @@ export interface ISignoutResponse {
   success: boolean;
   message: string;
 }
+
+export type ValidateUser = {
+  username: string;
+};

@@ -10,6 +10,7 @@ import { tokenRouter } from './routes/token';
 import { usersRouter } from './routes/users';
 import { currentUserRouter } from './routes/currentUser';
 import { ledgerRouter } from './routes/ledgers';
+import { ledgerAccessRouter } from './routes/ledgerAccess';
 
 const app: Application = express();
 
@@ -26,6 +27,7 @@ app.use(tokenRouter);
 app.use(usersRouter);
 app.use(currentUserRouter);
 app.use(ledgerRouter);
+app.use(ledgerAccessRouter);
 
 app.listen(5000, () => {
   console.log('server running');

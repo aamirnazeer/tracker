@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useDeleteLedgerMutation } from '../../store/ledger/ledgerSlice';
 
-const DeleteLedgerModal = ({ show, setDeletePopUp, data }: any) => {
+const DeleteLedgerDialog = ({ show, setDeletePopUp, data }: any) => {
   const [deleteLedger] = useDeleteLedgerMutation();
   const closeHandler = () => {
     setDeletePopUp(false);
@@ -47,4 +47,4 @@ const DeleteLedgerModal = ({ show, setDeletePopUp, data }: any) => {
   );
 };
 
-export default DeleteLedgerModal;
+export default DeleteLedgerDialog;

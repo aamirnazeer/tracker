@@ -5,12 +5,24 @@ import { authenticateToken } from '../middlewares/authenticateToken';
 const prisma = new PrismaClient();
 const router = express.Router();
 
-router.get(
+router.post(
   '/api/users',
   authenticateToken,
   async (req: Request, res: Response) => {
+    const { username } = req.body;
+    if (username === req.currentUser.username)
+      return res
+        .status(400)
+        .send({ message: 'cannot add owner to share list' });
     try {
-      const users = await prisma.users.findMany();
+      const users = await prisma.users.findFirst({
+        where: {
+          AND: { isDeleted: 0, username: username },
+        },
+        select: {
+          id: true,
+        },
+      });
       res.status(200).send(users);
     } catch (err) {
       console.log(err);
