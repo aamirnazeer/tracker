@@ -4,6 +4,7 @@ export type Ledger = {
   ownerId: string;
   isDeleted: number;
   type: number;
+  isOwner: boolean;
   owner: { username: string };
 };
 

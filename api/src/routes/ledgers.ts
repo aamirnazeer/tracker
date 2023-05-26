@@ -57,11 +57,18 @@ router.get(
         },
         orderBy: [
           {
-            date: 'desc',
+            createdAt: 'desc',
           },
         ],
       });
-      res.status(200).send(ledgers);
+      const processedLedgers = ledgers.map((el) => {
+        return {
+          ...el,
+          isOwner: req.currentUser.id === el.ownerId,
+        };
+      });
+      // console.log(ledgers);
+      res.status(200).send(processedLedgers);
     } catch (err) {
       console.log(err);
       res.status(400).send({ message: 'something went wrong' });

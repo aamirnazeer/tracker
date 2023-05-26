@@ -74,7 +74,10 @@ const BasicCard: React.FC<L> = ({ data }) => {
         </Tooltip>
 
         <Tooltip title="Delete">
-          <IconButton onClick={() => deleteHandler(data)}>
+          <IconButton
+            onClick={() => deleteHandler(data)}
+            disabled={!data.isOwner}
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -82,7 +85,7 @@ const BasicCard: React.FC<L> = ({ data }) => {
         <Tooltip title="Share">
           <IconButton
             onClick={() => shareHandler(data)}
-            disabled={data.ownerId !== userData?.id}
+            disabled={!data.isOwner}
           >
             <ShareIcon />
           </IconButton>

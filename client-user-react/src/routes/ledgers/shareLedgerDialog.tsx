@@ -90,6 +90,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: any) => {
   const accessSaveHandler = async () => {
     try {
       await updateLedgerAccess({ ledgerId: ledgerData.id, userIds: checked });
+      setSharePopUp(false);
     } catch (err) {
       console.log(err);
     }

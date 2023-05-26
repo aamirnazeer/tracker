@@ -15,6 +15,8 @@ model users {
   username          String              @unique(map: "username_UNIQUE") @db.VarChar(45)
   password          String              @db.VarChar(500)
   isDeleted         Int                 @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   entries           entries[]
   ledgers           ledgers[]
   ledgeracess       ledgeracess[]
@@ -50,7 +52,8 @@ model ledgers {
   ownerId           String              @db.VarChar(100)
   isDeleted         Int                 @default(0)
   type              Int                 @db.Int
-  date              DateTime            @default(now())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   ledgeracess       ledgeracess[]
   entries           entries[]
   defaultuserledger defaultuserledger[]
@@ -67,7 +70,8 @@ model ledgeracess {
 
 model entries {
   id              String     @id @default(uuid())
-  date            DateTime   @default(now())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
   amount          Int        @db.Int
   transactionType Int        @db.Int
   ledgerId        String     @db.VarChar(100)
