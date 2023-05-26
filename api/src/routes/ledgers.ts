@@ -34,8 +34,19 @@ router.get(
     try {
       const ledgers = await prisma.ledgers.findMany({
         where: {
-          ownerId: req.currentUser.id,
-          isDeleted: 0,
+          OR: [
+            {
+              ownerId: req.currentUser.id,
+              isDeleted: 0,
+            },
+            {
+              ledgeracess: {
+                some: {
+                  userid: req.currentUser.id,
+                },
+              },
+            },
+          ],
         },
         include: {
           owner: {

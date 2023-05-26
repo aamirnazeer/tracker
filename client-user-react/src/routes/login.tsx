@@ -28,7 +28,7 @@ const LogIn = () => {
       });
       setTimeout(() => {
         navigate('/');
-      }, 5000);
+      }, 100);
     } catch (error) {
       console.log(error);
       setLoading(false);

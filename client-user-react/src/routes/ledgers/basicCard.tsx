@@ -10,6 +10,7 @@ import { Ledger } from '../../types/ledger';
 import { SetStateAction, useState } from 'react';
 import DeleteLedgerDialog from './deleteLedgerDialog';
 import ShareLedgerDialog from './shareLedgerDialog';
+import { useGetCurrentUserQuery } from '../../store/user/userSlice';
 interface L {
   data: Ledger;
 }
@@ -19,6 +20,7 @@ const BasicCard: React.FC<L> = ({ data }) => {
   const [deletePopup, setDeletePopUp] = useState(false);
   const [sharePopup, setSharePopUp] = useState(false);
   const [dialogData, setDialogData] = useState({});
+  const { data: userData } = useGetCurrentUserQuery();
 
   const deleteHandler = (data: Ledger) => {
     setDialogData(data);
@@ -29,6 +31,7 @@ const BasicCard: React.FC<L> = ({ data }) => {
     setDialogData(data);
     setSharePopUp(true);
   };
+
   return (
     <Card
       sx={{
@@ -44,7 +47,10 @@ const BasicCard: React.FC<L> = ({ data }) => {
         setDeletePopUp={setDeletePopUp}
       />
       {sharePopup && (
-        <ShareLedgerDialog ledgerData={dialogData} setSharePopUp={setSharePopUp} />
+        <ShareLedgerDialog
+          ledgerData={dialogData}
+          setSharePopUp={setSharePopUp}
+        />
       )}
 
       <CardContent>
@@ -74,7 +80,10 @@ const BasicCard: React.FC<L> = ({ data }) => {
         </Tooltip>
 
         <Tooltip title="Share">
-          <IconButton onClick={() => shareHandler(data)}>
+          <IconButton
+            onClick={() => shareHandler(data)}
+            disabled={data.ownerId !== userData?.id}
+          >
             <ShareIcon />
           </IconButton>
         </Tooltip>
