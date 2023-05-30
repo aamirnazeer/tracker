@@ -6,9 +6,7 @@ export interface IUser {
 }
 
 type UserResponseValidation = {
-  data: {
-    id: string;
-  };
+  id: string;
 };
 
 export interface ILoginValues {

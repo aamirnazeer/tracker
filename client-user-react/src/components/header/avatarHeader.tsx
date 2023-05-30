@@ -9,10 +9,42 @@ import {
 import { useGetCurrentUserQuery } from '../../store/user/userSlice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { axiosClient } from '../../lib/axiosClient';
+import { IUser } from '../../types/user';
+
+import { useDispatch } from 'react-redux';
+import { ledgerApi } from '../../store/ledger/ledgerSlice';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signOutFn } from '../../lib/api/user';
+import { ISignoutResponse } from '../../types/user';
 
 const AvatarHeader = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data: userData } = useGetCurrentUserQuery();
+  const queryClient = useQueryClient();
+  // const { data: userData } = useGetCurrentUserQuery();
+  const { data: userData } = useQuery<IUser>({
+    queryKey: ['user'],
+    queryFn: async () => (await axiosClient.get('/currentuser')).data,
+    retry: false,
+  });
+
+  const signOut = useMutation<ISignoutResponse, unknown, void>({
+    mutationFn: signOutFn,
+    onSuccess: () => {
+      {
+        console.log('success');
+        queryClient.removeQueries({ queryKey: ['user'] });
+        navigate('/login');
+        dispatch(ledgerApi.util.resetApiState());
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -25,7 +57,7 @@ const AvatarHeader = () => {
 
   const logoutHandler = () => {
     handleCloseUserMenu();
-    navigate('/logout');
+    signOut.mutate();
   };
 
   const loginHandler = () => {

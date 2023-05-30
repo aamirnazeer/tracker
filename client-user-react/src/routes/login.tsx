@@ -7,32 +7,39 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
-import { useSigninMutation } from '../store/user/userSlice';
 import { useState } from 'react';
 import BackDropLoader from '../components/backdropLoader/backdropLoader';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { loginFn } from '../lib/api/user';
 
 const LogIn = () => {
-  const [login] = useSigninMutation();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const loginMutation = useMutation({
+    mutationFn: loginFn,
+    onSuccess: (res) => {
+      {
+        console.log(res);
+        navigate('/');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      setLoading(false);
+    },
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-
-    try {
-      await login({
-        username: data.get('username'),
-        password: data.get('password'),
-      });
-      setTimeout(() => {
-        navigate('/');
-      }, 100);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+    loginMutation.mutate({
+      username: data.get('username'),
+      password: data.get('password'),
+    });
   };
 
   return (

@@ -7,7 +7,6 @@ import ErrorPage from './errorPage.tsx';
 import LoginPage from './routes/login.tsx';
 import SignUp from './routes/signup.tsx';
 import Layout from './layout.tsx';
-import LogOut from './routes/logout.tsx';
 import Ledgers from './routes/ledgers/ledgers.tsx';
 import CssBaseline from '@mui/material/CssBaseline';
 import LayoutInverse from './layoutInverse.tsx';
@@ -37,11 +36,6 @@ const App = () => {
     {
       path: '/signup',
       element: <LayoutInverse children={<SignUp />} />,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: '/logout',
-      element: <LogOut />,
       errorElement: <ErrorPage />,
     },
     {

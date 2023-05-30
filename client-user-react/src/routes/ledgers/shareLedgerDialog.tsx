@@ -4,7 +4,6 @@ import {
   useAddLedgerAccessMutation,
   useUpdateLedgerAccessMutation,
 } from '../../store/ledger/ledgerSlice';
-import { useGetUserValidatedMutation } from '../../store/user/userSlice';
 import { useState, useEffect } from 'react';
 import {
   Dialog,
@@ -20,6 +19,8 @@ import {
   ListItemText,
 } from '@mui/material';
 import { Ledger } from '../../types/ledger';
+import { validateUserFn } from '../../lib/api/user';
+import { useMutation } from '@tanstack/react-query';
 
 interface IShare {
   setSharePopUp: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,9 +38,22 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
   const [searchUserName, setSearchUserName] = useState('');
   const [checked, setChecked] = useState<string[]>(['']);
   const { data: ledgerAccessData } = useGetLedgerAcessQuery(ledgerData.id);
-  const [getUserValidated] = useGetUserValidatedMutation();
   const [addLedgerAccess] = useAddLedgerAccessMutation();
   const [updateLedgerAccess] = useUpdateLedgerAccessMutation();
+
+  const validateMutation = useMutation({
+    mutationFn: validateUserFn,
+    onSuccess: (res) => {
+      {
+        console.log(res);
+        setVerifiedUser(res.id);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      setVerifiedUser('')
+    },
+  });
 
   useEffect(() => {
     const a = (ledgerAccessData || []).map((el) => el.users.id);
@@ -65,25 +79,12 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
     }
   };
 
-  const verifiedUserHandler = (res: Res) => {
-    setVerifiedUser(res.data.id);
-  };
-
-  const validator = async (e: string) => {
-    try {
-      const res: Res = await getUserValidated({ username: e });
-      verifiedUserHandler(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const validateUserToAccess = async (e: string) => {
-    setSearchUserName(e);
-    setTimeout(() => {
-      validator(e);
-    }, 1000);
-  };
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      validateMutation.mutate({ username: searchUserName });
+    }, 1500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchUserName]);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);
@@ -130,7 +131,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
               label="enter username"
               variant="outlined"
               value={searchUserName}
-              onChange={(e) => validateUserToAccess(e.target.value)}
+              onChange={(e) => setSearchUserName(e.target.value)}
             />
             <Button
               disabled={verifiedUser === '' ? true : false}

@@ -1,37 +1,49 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { useSignupMutation } from '../store/user/userSlice';
+import {
+  Button,
+  TextField,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import BackDropLoader from '../components/backdropLoader/backdropLoader';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signUpFn } from '../lib/api/user';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(false);
-  const [signup] = useSignupMutation();
+
+  const signUpMutation = useMutation({
+    mutationFn: signUpFn,
+    onSuccess: (res) => {
+      {
+        console.log(res);
+        navigate('/');
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+      setLoading(false);
+    },
+  });
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    try {
-      await signup({
-        email: data.get('email'),
-        firstname: data.get('firstName'),
-        lastname: data.get('lastName'),
-        password: data.get('password'),
-        username: data.get('username'),
-      });
-      navigate('/');
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
+    signUpMutation.mutate({
+      email: data.get('email'),
+      firstname: data.get('firstName'),
+      lastname: data.get('lastName'),
+      password: data.get('password'),
+      username: data.get('username'),
+    });
   };
 
   return (
