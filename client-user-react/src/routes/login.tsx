@@ -1,11 +1,12 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import {
+  Button,
+  TextField,
+  Link,
+  Grid,
+  Typography,
+  Container,
+  Box,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import BackDropLoader from '../components/backdropLoader/backdropLoader';
@@ -19,11 +20,13 @@ const LogIn = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginFn,
-    onSuccess: (res) => {
+    onSuccess: () => {
       {
-        console.log(res);
-        navigate('/');
         queryClient.invalidateQueries({ queryKey: ['user'] });
+        const delayDebounceFn = setTimeout(() => {
+          navigate('/');
+        }, 3000);
+        clearTimeout(delayDebounceFn);
       }
     },
     onError: (error) => {

@@ -4,14 +4,12 @@ import {
   Container,
   TextField,
   Button,
-  Grid,
-  Link,
   InputLabel,
   Select,
   MenuItem,
   FormControl,
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, Dispatch } from 'react';
 import { useCreateLedgerMutation } from '../../store/ledger/ledgerSlice';
 
 const style = {
@@ -26,7 +24,11 @@ const style = {
   p: 4,
 };
 
-const NewLedgerForm = ({ setOpen }: any) => {
+type INewLedgerForm = {
+  setOpen: Dispatch<React.SetStateAction<boolean>>;
+};
+
+const NewLedgerForm = ({ setOpen }: INewLedgerForm) => {
   const [createLedger] = useCreateLedgerMutation();
   const [type, setType] = useState('');
 

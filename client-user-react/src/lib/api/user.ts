@@ -5,6 +5,7 @@ import {
   ISignUpValues,
   ValidateUser,
   UserResponseValidation,
+  ISignoutResponse,
 } from '../../types/user';
 
 export const currentUserFn = async (): Promise<IUser> => {
@@ -19,7 +20,7 @@ export const signUpFn = async (data: ISignUpValues): Promise<IUser> => {
   return (await axiosClient.post('/signup', data)).data;
 };
 
-export const signOutFn = async () => {
+export const signOutFn = async (): Promise<ISignoutResponse> => {
   return (await axiosClient.delete('/logout')).data;
 };
 

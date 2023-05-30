@@ -37,12 +37,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
 
   const validateMutation = useMutation({
     mutationFn: validateUserFn,
-    onSuccess: (res) => {
-      {
-        console.log(res);
-        setVerifiedUser(res.id);
-      }
-    },
+    onSuccess: (res) => setVerifiedUser(res.id),
     onError: (error) => {
       console.log(error);
       setVerifiedUser('');
@@ -78,7 +73,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
       validateMutation.mutate({ username: searchUserName });
     }, 1000);
     return () => clearTimeout(delayDebounceFn);
-  }, [searchUserName]);
+  }, [searchUserName, validateMutation]);
 
   const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value);

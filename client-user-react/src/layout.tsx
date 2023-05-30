@@ -11,11 +11,7 @@ const Layout = ({ children }: JsxChild) => {
     queryKey: ['user'],
     queryFn: currentUserFn,
     retry: false,
-    onSuccess: (res) => {
-      console.log(res);
-    },
   });
-  console.log(error, isLoading);
   const navigate = useNavigate();
   useEffect(() => {
     if (error) {

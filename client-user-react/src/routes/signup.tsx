@@ -20,9 +20,8 @@ const SignUp = () => {
 
   const signUpMutation = useMutation({
     mutationFn: signUpFn,
-    onSuccess: (res) => {
+    onSuccess: () => {
       {
-        console.log(res);
         navigate('/');
         queryClient.invalidateQueries({ queryKey: ['user'] });
       }
