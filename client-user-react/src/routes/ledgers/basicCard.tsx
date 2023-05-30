@@ -7,20 +7,33 @@ import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ShareIcon from '@mui/icons-material/Share';
 import Typography from '@mui/material/Typography';
 import { Ledger } from '../../types/ledger';
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import DeleteLedgerDialog from './deleteLedgerDialog';
 import ShareLedgerDialog from './shareLedgerDialog';
-import { useGetCurrentUserQuery } from '../../store/user/userSlice';
+
 interface L {
   data: Ledger;
 }
 
-const BasicCard: React.FC<L> = ({ data }) => {
+const initialDialogDataValues = {
+  id: '',
+  name: '',
+  ownerId: '',
+  isDeleted: 0,
+  type: 0,
+  isOwner: true,
+  owner: {
+    username: '',
+  },
+  updatedAt: '',
+  createdAt: '',
+};
+
+const BasicCard = ({ data }: L) => {
   const matches = useMediaQuery('(min-width:600px)');
   const [deletePopup, setDeletePopUp] = useState(false);
   const [sharePopup, setSharePopUp] = useState(false);
-  const [dialogData, setDialogData] = useState({});
-  const { data: userData } = useGetCurrentUserQuery();
+  const [dialogData, setDialogData] = useState<Ledger>(initialDialogDataValues);
 
   const deleteHandler = (data: Ledger) => {
     setDialogData(data);
@@ -41,18 +54,15 @@ const BasicCard: React.FC<L> = ({ data }) => {
       }}
       variant="outlined"
     >
-      <DeleteLedgerDialog
-        data={dialogData}
-        show={deletePopup}
-        setDeletePopUp={setDeletePopUp}
-      />
+      {deletePopup && (
+        <DeleteLedgerDialog data={dialogData} setDeletePopUp={setDeletePopUp} />
+      )}
       {sharePopup && (
         <ShareLedgerDialog
           ledgerData={dialogData}
           setSharePopUp={setSharePopUp}
         />
       )}
-
       <CardContent>
         <Typography variant="h5" component="div">
           {data.name}
@@ -72,23 +82,26 @@ const BasicCard: React.FC<L> = ({ data }) => {
             <FileOpenIcon />
           </IconButton>
         </Tooltip>
-
         <Tooltip title="Delete">
-          <IconButton
-            onClick={() => deleteHandler(data)}
-            disabled={!data.isOwner}
-          >
-            <DeleteIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              onClick={() => deleteHandler(data)}
+              disabled={!data.isOwner}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </span>
         </Tooltip>
 
         <Tooltip title="Share">
-          <IconButton
-            onClick={() => shareHandler(data)}
-            disabled={!data.isOwner}
-          >
-            <ShareIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              onClick={() => shareHandler(data)}
+              disabled={!data.isOwner}
+            >
+              <ShareIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       </CardActions>
     </Card>

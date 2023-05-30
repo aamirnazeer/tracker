@@ -19,8 +19,20 @@ import {
   List,
   ListItemText,
 } from '@mui/material';
+import { Ledger } from '../../types/ledger';
 
-const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: any) => {
+interface IShare {
+  setSharePopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  ledgerData: Ledger;
+}
+
+type Res = {
+  data: {
+    id: string;
+  };
+};
+
+const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
   const [verifiedUser, setVerifiedUser] = useState('');
   const [searchUserName, setSearchUserName] = useState('');
   const [checked, setChecked] = useState<string[]>(['']);
@@ -53,16 +65,14 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: any) => {
     }
   };
 
+  const verifiedUserHandler = (res: Res) => {
+    setVerifiedUser(res.data.id);
+  };
+
   const validator = async (e: string) => {
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: Unreachable code error
-      const { data } = await getUserValidated({ username: e });
-      if (data?.id) {
-        setVerifiedUser(data.id);
-      } else {
-        setVerifiedUser('');
-      }
+      const res: Res = await getUserValidated({ username: e });
+      verifiedUserHandler(res);
     } catch (err) {
       console.log(err);
     }

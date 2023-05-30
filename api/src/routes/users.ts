@@ -23,6 +23,9 @@ router.post(
           id: true,
         },
       });
+      if (users === null) {
+        return res.status(400).send({ message: 'user not found' });
+      }
       res.status(200).send(users);
     } catch (err) {
       console.log(err);

@@ -39,7 +39,7 @@ export const ledgerApi = createApi({
       }),
       invalidatesTags: ['Ledger'],
     }),
-    getLedgerAcess: builder.query<LedgerWithAccess[], number>({
+    getLedgerAcess: builder.query<LedgerWithAccess[], string>({
       query: (id) => ({ url: `ledgeraccess/${id}` }),
       providesTags: ['LedgerAccess'],
     }),

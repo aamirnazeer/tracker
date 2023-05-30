@@ -7,8 +7,14 @@ import {
   Button,
 } from '@mui/material';
 import { useDeleteLedgerMutation } from '../../store/ledger/ledgerSlice';
+import { Ledger } from '../../types/ledger';
 
-const DeleteLedgerDialog = ({ show, setDeletePopUp, data }: any) => {
+interface IDelete {
+  setDeletePopUp: React.Dispatch<React.SetStateAction<boolean>>;
+  data: Ledger;
+}
+
+const DeleteLedgerDialog = ({ setDeletePopUp, data }: IDelete) => {
   const [deleteLedger] = useDeleteLedgerMutation();
   const closeHandler = () => {
     setDeletePopUp(false);
@@ -24,7 +30,7 @@ const DeleteLedgerDialog = ({ show, setDeletePopUp, data }: any) => {
   };
   return (
     <Dialog
-      open={show}
+      open={true}
       onClose={closeHandler}
       // PaperComponent={PaperComponent}
       aria-labelledby="draggable-dialog-title"

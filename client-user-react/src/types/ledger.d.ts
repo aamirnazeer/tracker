@@ -6,6 +6,8 @@ export type Ledger = {
   type: number;
   isOwner: boolean;
   owner: { username: string };
+  updatedAt: string;
+  createdAt: string;
 };
 
 export type LedgerWithAccess = {

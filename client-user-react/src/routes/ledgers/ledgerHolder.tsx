@@ -2,12 +2,11 @@ import { Ledger } from '../../types/ledger';
 import BasicCard from './basicCard';
 import { Box } from '@mui/material';
 
-interface ILedger {
+type ILedger = {
   ledgerData: Ledger[] | undefined;
-}
+};
 
-const LedgerHolder: React.FC<ILedger> = ({ ledgerData }) => {
-  console.log(ledgerData);
+const LedgerHolder = ({ ledgerData }: ILedger) => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
       {(ledgerData || []).map((el) => {

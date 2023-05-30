@@ -112,6 +112,11 @@ router.delete(
         },
         data: { isDeleted: 1 },
       });
+      await prisma.ledgeracess.deleteMany({
+        where: {
+          ledgerid: id,
+        },
+      });
       res.status(200).send({ message: 'ledger deleted successfully' });
     } catch (err) {
       console.log(err);
