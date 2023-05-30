@@ -27,12 +27,6 @@ interface IShare {
   ledgerData: Ledger;
 }
 
-type Res = {
-  data: {
-    id: string;
-  };
-};
-
 const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
   const [verifiedUser, setVerifiedUser] = useState('');
   const [searchUserName, setSearchUserName] = useState('');
@@ -51,7 +45,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
     },
     onError: (error) => {
       console.log(error);
-      setVerifiedUser('')
+      setVerifiedUser('');
     },
   });
 
@@ -82,7 +76,7 @@ const ShareLedgerDialog = ({ ledgerData, setSharePopUp }: IShare) => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       validateMutation.mutate({ username: searchUserName });
-    }, 1500);
+    }, 1000);
     return () => clearTimeout(delayDebounceFn);
   }, [searchUserName]);
 
